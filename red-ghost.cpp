@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <cmath>
 #include <map>
 
@@ -22,8 +21,6 @@ void RedGhost::draw(sf::RenderWindow &i_window)
     circle.setFillColor(sf::Color::Red);
     circle.setPosition(position.x,position.y);
     i_window.draw(circle);
-
-    i_window.draw(circle);
 }
 
 void RedGhost::set_position(short i_x,short i_y)
@@ -41,7 +38,6 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
 	walls[1] = map_collision(0, 0, position.x, position.y - GHOST_SPEED, i_map);
 	walls[2] = map_collision(0, 0, position.x - GHOST_SPEED, position.y, i_map);
 	walls[3] = map_collision(0, 0, position.x, GHOST_SPEED + position.y, i_map);
-    // std::cout<<"************ for walls[3]  x :"<<std::to_string(position.x)<<" y : "<<std::to_string(GHOST_SPEED + position.y)<<" *****************"<<std::endl;
 
     // Loop to get number of all available paths based on current location
     for(unsigned char a = 0; a < 4; a++)
@@ -62,7 +58,7 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
         }
         else if(!walls[a])
         {
-            // Check to store the positions of available paths based on the direction
+            // Check to store the positions of available paths based on the direction being faced
             switch (a)
             {
                 case 0:
@@ -106,33 +102,24 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
     unsigned char minKey = 0; // Variable to store the key corresponding to the minimum targetDist
 
      for (const auto& pair : available_paths) {
-        std::cout << "Key: " << static_cast<int>(pair.first) << std::endl; // Print the key
-        std::cout << "x: " << pair.second.x << ", y: " << pair.second.y << std::endl; // Print x and y values
-        std::cout << "Pacman x: " <<i_pacman.getPosition().x << ",Pacman y: " << i_pacman.getPosition().y << std::endl; // Print x and y values
-        std::cout << "Target Distance: " << pair.second.targetDist << std::endl; // Print target distance if needed
-        std::cout << std::endl; // Add a newline for clarity
          if (pair.second.targetDist < minTargetDist) {
             minTargetDist = pair.second.targetDist;
             minKey = pair.first;
         }
-        
       }
-
-        std::cout<< "############ At junction with shortest path being : "<< std::to_string(minKey) << " with dist of "<< std::to_string(minTargetDist)<<" #############" <<std::endl;
 
         if(!walls[minKey] )
         {
             direction = minKey;
         }
     }
-    // If there's still a wall in the current direction generate a a new one that isn't blocked by a wall
+    // If there's still a wall in the current direction check all directions to find one without a wall
     else if(walls[direction])
     {
          for(unsigned char a = 0; a < 4; a++)
          {
              if(!walls[a] && a != (direction + 2) % 4)
              {
-                std::cout<< "😖😖😖😖😖😖😖😖😖😖😖 Wall found : now switching to : "<<std::to_string(a)<<" 😖😖😖😖😖😖😖😖😖" <<std::endl;
                 direction = a;
 
                 break;
@@ -143,7 +130,6 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
     if(!walls[direction])
     {
         available_paths.clear();
-         std::cout << "======================  ********************* ===============================" << std::endl;
         switch (direction)
         {
             case 0:
