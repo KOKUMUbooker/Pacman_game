@@ -19,6 +19,13 @@ enum Cell
 	Wall
 };
 
+struct AvailablePositions
+{
+	short x;
+	short y;
+	short targetDist = 0;
+};
+
 struct Position
 {
 	short x;

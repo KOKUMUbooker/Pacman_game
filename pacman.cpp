@@ -104,3 +104,7 @@ void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
         position.x = PACMAN_SPEED - CELL_SIZE;
 	}
 }
+
+Position Pacman::getPosition(){
+    return position;
+};

@@ -6,7 +6,7 @@
 #include "headers/convert-sketch.hpp"
 #include "headers/draw-map.hpp"
 #include "headers/pacman.hpp"
-#include "headers/ghost.hpp"
+#include "headers/red-ghost.hpp"
 
 int main(){
     Pacman pacman;
@@ -14,7 +14,7 @@ int main(){
 	//Initial ghost positions.
 	std::array<Position, 4> ghost_positions;
 
-	Ghost ghost;
+	RedGhost red_ghost;
 
  	std::array<std::string, MAP_HEIGHT> map_sketch = {
 		" ################### ",
@@ -42,7 +42,7 @@ int main(){
 
     std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> map = convert_sketch(map_sketch,ghost_positions,pacman);
 	//TODO: TO BE REMOVED LATER :
-	ghost.set_position(ghost_positions[0].x,ghost_positions[0].y);
+	red_ghost.set_position(ghost_positions[0].x,ghost_positions[0].y);
 
     // (16 * 21 * 2 = 672) Width , (16 * 16 * 21 = 5376) Height for sf::VideoMode
 	sf::RenderWindow window(sf::VideoMode(CELL_SIZE * MAP_WIDTH * SCREEN_RESIZE, (FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT) * SCREEN_RESIZE), "Pac-Man Game", sf::Style::Close);
@@ -72,9 +72,9 @@ int main(){
 
         window.clear();
         pacman.draw(window);
-		ghost.draw(window);
+		red_ghost.draw(window);
         pacman.update(map);
-		ghost.update(map);
+		red_ghost.update(map,pacman);
         draw_map(map,window);
         
         window.display();
