@@ -7,6 +7,8 @@
 #include "headers/pacman.hpp"
 #include "headers/red-ghost.hpp"
 #include "headers/pink-ghost.hpp"
+#include "headers/blue-ghost.hpp"
+#include "headers/orange-ghost.hpp"
 
 int main(){
     Pacman pacman;
@@ -17,6 +19,8 @@ int main(){
 	// Ghosts
 	RedGhost red_ghost;
 	PinkGhost pink_ghost;
+	BlueGhost blue_ghost;
+	OrangeGhost orange_ghost;
 
  	std::array<std::string, MAP_HEIGHT> map_sketch = {
 		" ################### ",
@@ -47,10 +51,13 @@ int main(){
 	// Setting positions of the ghosts:
 	red_ghost.set_position(ghost_positions[0].x,ghost_positions[0].y);
 	pink_ghost.set_position(ghost_positions[1].x,ghost_positions[1].y);
+	blue_ghost.set_position(ghost_positions[2].x,ghost_positions[2].y);
+	orange_ghost.set_position(ghost_positions[3].x,ghost_positions[3].y);
 
 	Position house_exit {ghost_positions[0].x, ghost_positions[0].y}; // Exit location to be used as initial target of ghosts within the house
-	pink_ghost.set_target(house_exit.x, house_exit.y);
 	pink_ghost.set_home_exit(house_exit.x, house_exit.y);
+	blue_ghost.set_home_exit(house_exit.x, house_exit.y);
+	orange_ghost.set_home_exit(house_exit.x, house_exit.y);
    
 	// (16 * 21 * 2 = 672) Width , (16 * 16 * 21 = 5376) Height for sf::VideoMode
 	sf::RenderWindow window(sf::VideoMode(CELL_SIZE * MAP_WIDTH * SCREEN_RESIZE, (FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT) * SCREEN_RESIZE), "Pac-Man Game", sf::Style::Close);
@@ -82,10 +89,14 @@ int main(){
         pacman.draw(window);
 		red_ghost.draw(window);
 		pink_ghost.draw(window);
+		blue_ghost.draw(window);
+		orange_ghost.draw(window);
 
         pacman.update(map);
 		red_ghost.update(map,pacman);
 		pink_ghost.update(map,pacman);
+		blue_ghost.update(map,pacman,red_ghost.getPosition());
+		orange_ghost.update(map,pacman);
 
         draw_map(map,window);
         

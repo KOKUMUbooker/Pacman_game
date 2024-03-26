@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "headers/global.hpp"
-#include "headers/set-optimal-direction.hpp"
+#include "headers/utils.hpp"
 #include "headers/map-collision.hpp"
 
 short getDistApart(Position target,AvailablePositions current){
@@ -30,6 +30,33 @@ Position getMapCoordinatesInGrid(Position position){
 
     return Position {static_cast<short>(cell_x * 16), static_cast<short>(cell_y *16)};
 }
+
+Position solveQuadraticEquation(short d, const Position& knownCoord) 
+{
+        short dSquared = d * d;
+        short deltaX = 0.0;
+        short deltaY = 0.0;
+
+        // Solve the quadratic equation for deltaX^2 + deltaY^2 = d^2
+        // We solve for deltaX and deltaY separately
+
+        // Solve for deltaX
+        for (short potentialDeltaX = -d; potentialDeltaX <= d; potentialDeltaX += 0.1) {
+        short potentialDeltaYSquared = dSquared - potentialDeltaX * potentialDeltaX;
+        if (potentialDeltaYSquared >= 0) {
+            short potentialDeltaY = sqrt(potentialDeltaYSquared);
+            short distanceToKnownPoint = sqrt((potentialDeltaX - knownCoord.x) * (potentialDeltaX - knownCoord.x)
+                                            + (potentialDeltaY - knownCoord.y) * (potentialDeltaY - knownCoord.y));
+            if (abs(distanceToKnownPoint - d) < 0.0001) {  // Adjust epsilon as needed
+                deltaX = potentialDeltaX;
+                deltaY = potentialDeltaY;
+                break;
+            }
+        }
+        }
+
+        return Position {static_cast<short>(deltaX), static_cast<short>(deltaY)};
+        }
 
 void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direction ,Position user_position, Position target_position)
 {
@@ -102,7 +129,7 @@ void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direc
                 minTargetDist = pair.second.targetDist;
                 minKey = pair.first;
             }
-        }
+         }
 
             if(!walls[minKey] )
             {

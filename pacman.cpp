@@ -104,6 +104,7 @@ void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
     map_collision(1, 0, position.x, position.y, i_map);
 }
 
-Position Pacman::getPosition(){
+Position Pacman::getPosition()
+{
     return position;
 };

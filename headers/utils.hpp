@@ -4,6 +4,7 @@
 #include <map>
 #include "global.hpp"
 #include <string>
+#include <vector>
 
 short getDistApart(Position target,AvailablePositions current);
 
@@ -18,3 +19,5 @@ Position getMapCoordinatesInGrid(Position Position);
 std::string getStringDirection(unsigned char direction);
 
 std::vector<Position> getOptimalPathCoordinates(Position user_position, Position target_position,unsigned char initial_user_dir ,std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> i_map);
+
+Position solveQuadraticEquation(double d, const Position& knownCoord);

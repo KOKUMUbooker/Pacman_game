@@ -3,7 +3,7 @@
 #include <map>
 
 #include "headers/global.hpp"
-#include "headers/set-optimal-direction.hpp"
+#include "headers/utils.hpp"
 #include "headers/red-ghost.hpp"
 #include "headers/map-collision.hpp"
 
@@ -72,3 +72,8 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
         position.x = PACMAN_SPEED - CELL_SIZE;
 	}
 }
+
+Position RedGhost::getPosition()
+{
+    return position;
+};

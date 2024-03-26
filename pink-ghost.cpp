@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "headers/global.hpp"
-#include "headers/set-optimal-direction.hpp"
+#include "headers/utils.hpp"
 #include "headers/map-collision.hpp"
 #include "headers/pink-ghost.hpp"
 
@@ -42,34 +42,38 @@ void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
 	walls[2] = map_collision(0, use_door, position.x - GHOST_SPEED, position.y, i_map);
 	walls[3] = map_collision(0, use_door, position.x, GHOST_SPEED + position.y, i_map);
     
-    if(position == home_exit)
+    if(position == home_exit && use_door == 1)
     {
         use_door = 0; // Prevent re-entry to home
         set_target(i_pacman.getPosition().x,i_pacman.getPosition().y);// Set new target;
     }
+    else if(!(position == home_exit) && use_door == 1)
+    {
+        set_target(home_exit.x,home_exit.y);
+    }
     else if(!use_door)
     {
         // The pink ghost targets 4 tiles ahead of pacman
-        Position new_target {getMapCoordinatesInGrid(i_pacman.getPosition()).x,getMapCoordinatesInGrid(i_pacman.getPosition()).y};
+        Position new_target {i_pacman.getPosition().x,i_pacman.getPosition().y};
         
         switch (i_pacman.getDirection())
         {
-            case 0:
+            case 0: // Right
             {
                 new_target.x += CELL_SIZE * 4;
                 break;
             }
-            case 1:
+            case 1: // Up
             {
                 new_target.y += CELL_SIZE * 4;
                 break;
             }
-            case 2:
+            case 2:  // Left
             {
                 new_target.x -= CELL_SIZE * 4;
                 break;
             }
-            case 3:
+            case 3:  // Down
             {
                 new_target.y -= CELL_SIZE * 4;
                 break;
@@ -79,9 +83,9 @@ void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
 
         set_target(new_target.x,new_target.y);
         std::cout<< "\n==================================================="<<std::endl;
-        std::cout<< "New location x Pink 🌺 : "<<target.x<<" y : "<<target.y<<std::endl;
-        std::cout<< "New location x Red  🟥 : "<<i_pacman.getPosition().x<<" y : "<<i_pacman.getPosition().y<<std::endl;        
-    std::cout<< "===================================================\n"<<std::endl;
+        std::cout<< "Target for Pink   x :"<<target.x<<", y : "<<target.y<<std::endl;
+        std::cout<< "Target for Red   x :"<<i_pacman.getPosition().x<<", y : "<<i_pacman.getPosition().y<<std::endl;        
+        std::cout<< "===================================================\n"<<std::endl;
     }
 
     set_optimal_direction(walls, direction, position ,target);
@@ -90,25 +94,25 @@ void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
     {
         switch (direction)
         {
-            case 0:
+            case 0: // Right
             {
                 position.x += GHOST_SPEED;
                 
                 break;
             }
-            case 1:
+            case 1:  // Up
             {
                 position.y -= GHOST_SPEED;
 
                 break;
             }
-            case 2:
+            case 2:  // Left
             {
                 position.x -= GHOST_SPEED;
 
                 break;
             }
-            case 3:
+            case 3:  // Down
             {
                 position.y += GHOST_SPEED;
             }
