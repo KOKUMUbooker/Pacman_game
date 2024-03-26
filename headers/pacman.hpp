@@ -12,4 +12,5 @@ class Pacman
         void set_position(short i_x ,short i_y);
         void update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map);
         Position getPosition();
+        unsigned char getDirection();
 };

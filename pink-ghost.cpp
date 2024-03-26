@@ -46,7 +46,12 @@ void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
     if(position == home_exit)
     {
         use_door = 0; // Prevent re-entry to home
+        is_out_of_house = 1;
         target = i_pacman.getPosition(); // Set new target
+    }
+    else if(!use_door){
+        // The pink ghost targets 4 tiles ahead of pacman
+        // std::cout<< "===================== OUT ========================"<<std::endl;
     }
     set_optimal_direction(walls, direction,position ,target);
 

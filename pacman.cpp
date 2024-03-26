@@ -20,6 +20,11 @@ void Pacman::set_position(short i_x,short i_y)
     position = {i_x,i_y};
 }
 
+unsigned char Pacman::getDirection()
+{
+    return direction;
+}
+
 void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
 {
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
@@ -58,42 +63,6 @@ void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
         }
     }
 
-    // switch (direction)
-    // {
-    //     case 0:
-    //     {
-    //         if(map_collision(1, 0, PACMAN_SPEED + position.x,position.y,i_map) == 0)
-    //         {
-    //             position.x += PACMAN_SPEED;
-    //         }
-    //         break;
-    //     }
-    //     case 1:
-    //     {
-    //         if(!map_collision(1, 0, position.x, position.y - PACMAN_SPEED,i_map))
-    //         {
-    //             position.y -= PACMAN_SPEED;
-    //         }
-    //         break;
-    //     }
-    //     case 2:
-    //     {
-    //         if(!map_collision(1, 0, position.x - PACMAN_SPEED, position.y, i_map))
-    //         {
-    //             position.x -= PACMAN_SPEED;
-    //         }
-    //         break;
-    //     }
-    //     case 3:
-    //     {
-    //         if(!map_collision(1, 0, position.x,PACMAN_SPEED + position.y,i_map))
-    //         {
-    //             position.y += PACMAN_SPEED;
-    //         }
-    //         break;
-    //     }
-    
-    // }
     if (!walls[direction])
 	{
 		switch (direction)
