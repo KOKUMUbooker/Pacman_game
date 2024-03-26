@@ -14,17 +14,26 @@ short getDistApart(Position target,AvailablePositions current){
     return std::sqrt((std::pow(x,2)+std::pow(y,2)));
 }
 
+std::string getStringDirection(unsigned char direction)
+{
+    // 0 = Right, 1 = Up, 2 = left, 3 = Down
+    if(direction == 0) { return "Right";}
+    else if(direction == 1) { return "Up";}
+    else if(direction == 2) { return "Left";}
+    else if(direction == 3) { return "Down";}
+    else return "";
+}
+
 Position getMapCoordinatesInGrid(Position position){
     short cell_x = ceil(position.x / CELL_SIZE);
     short cell_y = ceil(position.y / CELL_SIZE);
 
     return Position {static_cast<short>(cell_x * 16), static_cast<short>(cell_y *16)};
-};
+}
 
 void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direction ,Position user_position, Position target_position)
 {
     std::map<unsigned char,AvailablePositions> available_paths {};
-    std::cout << "User direction in set_optimal_direction fn: "<<std::to_string(user_direction)<<std::endl;
     
     // Loop to get number of all available paths based on current location
     for(unsigned char a = 0; a < 4; a++)
@@ -114,7 +123,6 @@ void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direc
          }
     }
     
-    std::cout<<" Direction in set_optimal_direction fn: "<< std::to_string(user_direction)<<"💥💥💥💥💥💥"<<std::endl;
     available_paths.clear();    
 }
 

@@ -8,7 +8,7 @@
 #include "headers/map-collision.hpp"
 #include "headers/pink-ghost.hpp"
 
-PinkGhost::PinkGhost():use_door{1} {}
+PinkGhost::PinkGhost():use_door{1},direction{0} {}
 
 void PinkGhost::draw(sf::RenderWindow &i_window)
 {
@@ -42,26 +42,50 @@ void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
 	walls[2] = map_collision(0, use_door, position.x - GHOST_SPEED, position.y, i_map);
 	walls[3] = map_collision(0, use_door, position.x, GHOST_SPEED + position.y, i_map);
     
-    target = use_door ? home_exit : i_pacman.getPosition() ;
     if(position == home_exit)
     {
         use_door = 0; // Prevent re-entry to home
-        is_out_of_house = 1;
-        target = i_pacman.getPosition(); // Set new target
+        set_target(i_pacman.getPosition().x,i_pacman.getPosition().y);// Set new target;
     }
     else if(!use_door)
     {
         // The pink ghost targets 4 tiles ahead of pacman
-        Position pos = getMapCoordinatesInGrid(position);
-        std::cout<< "\n========================================= "<<std::endl;
-        std::cout<< "Actual coordinates x : "<<pos.x<<" y : "<<pos.y<<std::endl;
-        std::vector<Position> coordinates = getOptimalPathCoordinates(position,i_pacman.getPosition(),direction,i_map); 
-        std::cout<< "No of cells to get to target "<<std::to_string(coordinates.size())<<" 😎😎😎😎😎 "<<std::endl;
-        std::cout<< " ========================================= \n"<<std::endl;   
+        Position new_target {getMapCoordinatesInGrid(i_pacman.getPosition()).x,getMapCoordinatesInGrid(i_pacman.getPosition()).y};
+        
+        switch (i_pacman.getDirection())
+        {
+            case 0:
+            {
+                new_target.x += CELL_SIZE * 4;
+                break;
+            }
+            case 1:
+            {
+                new_target.y += CELL_SIZE * 4;
+                break;
+            }
+            case 2:
+            {
+                new_target.x -= CELL_SIZE * 4;
+                break;
+            }
+            case 3:
+            {
+                new_target.y -= CELL_SIZE * 4;
+                break;
+            }
+            
+        }
 
+        set_target(new_target.x,new_target.y);
+        std::cout<< "\n==================================================="<<std::endl;
+        std::cout<< "New location x Pink 🌺 : "<<target.x<<" y : "<<target.y<<std::endl;
+        std::cout<< "New location x Red  🟥 : "<<i_pacman.getPosition().x<<" y : "<<i_pacman.getPosition().y<<std::endl;        
+    std::cout<< "===================================================\n"<<std::endl;
     }
-    set_optimal_direction(walls, direction,position ,target);
 
+    set_optimal_direction(walls, direction, position ,target);
+    
     if(!walls[direction])
     {
         switch (direction)
