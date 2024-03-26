@@ -15,6 +15,12 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::ar
         {
             switch (i_map_sketch[a][b])
             {
+                case '=':
+                {
+                    output_map[b][a] = Cell::Door;
+
+                    break;
+                }
                 case ' ':
                 {
                     output_map[b][a] = Cell::Empty;
@@ -31,6 +37,19 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::ar
                 {
                     output_map[b][a] = Cell::Pellet;
                     // std::cout<<"Pellet found at ("<<std::to_string(b)<<","<<std::to_string(a)<<")"<<std::endl;
+
+                    break;
+                }
+                case 'O':
+                {
+                    output_map[b][a] = Cell::Energizer;
+
+                    break;
+                }
+                case 'P':
+                {
+                    // b = how far along the x-axis, a = how far along the y-axis
+                    i_pacman.set_position(CELL_SIZE * b,CELL_SIZE * a);
 
                     break;
                 }
@@ -66,13 +85,6 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::ar
 
 					break;
 				}
-                case 'P':
-                {
-                    // b = how far along the x-axis, a = how far along the y-axis
-                    i_pacman.set_position(CELL_SIZE * b,CELL_SIZE * a);
-
-                    break;
-                }
             }
         }
     }

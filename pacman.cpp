@@ -58,42 +58,70 @@ void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
         }
     }
 
-    switch (direction)
-    {
-        case 0:
-        {
-            if(map_collision(1, 0, PACMAN_SPEED + position.x,position.y,i_map) == 0)
-            {
-                position.x += PACMAN_SPEED;
-            }
-            break;
-        }
-        case 1:
-        {
-            if(!map_collision(1, 0, position.x, position.y - PACMAN_SPEED,i_map))
-            {
-                position.y -= PACMAN_SPEED;
-            }
-            break;
-        }
-        case 2:
-        {
-            if(!map_collision(1, 0, position.x - PACMAN_SPEED, position.y, i_map))
-            {
-                position.x -= PACMAN_SPEED;
-            }
-            break;
-        }
-        case 3:
-        {
-            if(!map_collision(1, 0, position.x,PACMAN_SPEED + position.y,i_map))
-            {
-                position.y += PACMAN_SPEED;
-            }
-            break;
-        }
+    // switch (direction)
+    // {
+    //     case 0:
+    //     {
+    //         if(map_collision(1, 0, PACMAN_SPEED + position.x,position.y,i_map) == 0)
+    //         {
+    //             position.x += PACMAN_SPEED;
+    //         }
+    //         break;
+    //     }
+    //     case 1:
+    //     {
+    //         if(!map_collision(1, 0, position.x, position.y - PACMAN_SPEED,i_map))
+    //         {
+    //             position.y -= PACMAN_SPEED;
+    //         }
+    //         break;
+    //     }
+    //     case 2:
+    //     {
+    //         if(!map_collision(1, 0, position.x - PACMAN_SPEED, position.y, i_map))
+    //         {
+    //             position.x -= PACMAN_SPEED;
+    //         }
+    //         break;
+    //     }
+    //     case 3:
+    //     {
+    //         if(!map_collision(1, 0, position.x,PACMAN_SPEED + position.y,i_map))
+    //         {
+    //             position.y += PACMAN_SPEED;
+    //         }
+    //         break;
+    //     }
     
-    }
+    // }
+    if (!walls[direction])
+	{
+		switch (direction)
+		{
+			case 0:
+			{
+				position.x += PACMAN_SPEED;
+
+				break;
+			}
+			case 1:
+			{
+				position.y -= PACMAN_SPEED;
+
+				break;
+			}
+			case 2:
+			{
+				position.x -= PACMAN_SPEED;
+
+				break;
+			}
+			case 3:
+			{
+				position.y += PACMAN_SPEED;
+			}
+		}
+	}
 
     if (position.x <= -CELL_SIZE )
 	{
@@ -103,6 +131,8 @@ void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
 	{
         position.x = PACMAN_SPEED - CELL_SIZE;
 	}
+
+    map_collision(1, 0, position.x, position.y, i_map);
 }
 
 Position Pacman::getPosition(){

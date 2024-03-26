@@ -3,11 +3,11 @@
 #include "global.hpp"
 #include "pacman.hpp"
 
-class RedGhost
+class PinkGhost
 {
     Position position;
     unsigned char direction; // 0 = Right, 1 = Up, 2 = left, 3 = Down
-    bool use_door = 0;
+    bool use_door;
 
     public:
         void draw(sf::RenderWindow &i_window);

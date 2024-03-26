@@ -1,3 +1,72 @@
+// #include <array>
+// #include <cmath>
+// #include <iostream>
+
+// #include "headers/global.hpp"
+// #include "headers/map-collision.hpp"
+
+
+// bool map_collision(bool i_collect_pellets, bool i_use_door, short i_x, short i_y, std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
+// {
+// 	bool output = 0;
+
+// 	// Getting the exact position.
+// 	float cell_x = i_x / static_cast<float>(CELL_SIZE);
+// 	float cell_y = i_y / static_cast<float>(CELL_SIZE);
+
+// 	if(floor(cell_x) >= 0 && floor(cell_y) >= 0 && MAP_HEIGHT > floor(cell_y) && MAP_WIDTH >floor(cell_x))
+// 	{
+// 		if((i_map[floor(cell_x)][floor(cell_y)] == Cell::Wall) )
+// 		{
+// 			output = 1;
+// 		}
+// 		else if(i_collect_pellets && i_map[floor(cell_x)][floor(cell_y)] == Cell::Pellet)
+// 		{
+// 			i_map[floor(cell_x)][floor(cell_y)] = Cell::Empty;
+// 		}
+// 	}
+
+// 	if(ceil(cell_x) >= 0 && floor(cell_y) >= 0 && MAP_HEIGHT > floor(cell_y) && MAP_WIDTH >ceil(cell_x))
+// 	{
+// 		if(i_map[ceil(cell_x)][floor(cell_y)] == Cell::Wall)
+// 		{
+// 			output = 1;
+// 		}
+// 		else if(i_collect_pellets && i_map[ceil(cell_x)][floor(cell_y)] == Cell::Pellet)
+// 		{
+// 			i_map[ceil(cell_x)][floor(cell_y)] = Cell::Empty;
+// 		}
+// 	}
+
+// 	if(floor(cell_x) >= 0 && ceil(cell_y) >= 0 && MAP_HEIGHT > ceil(cell_y) && MAP_WIDTH >floor(cell_x))
+// 	{
+// 		if(i_map[floor(cell_x)][ceil(cell_y)] == Cell::Wall)
+// 		{
+// 			output = 1;
+// 		}
+// 		else if(i_collect_pellets && i_map[floor(cell_x)][ceil(cell_y)] == Cell::Pellet)
+// 		{
+// 			i_map[floor(cell_x)][ceil(cell_y)] = Cell::Empty;
+// 		}
+// 	}
+
+// 	// Bottom direction
+// 	if(ceil(cell_x) >= 0 && ceil(cell_y) >= 0 && MAP_HEIGHT > ceil(cell_y) && MAP_WIDTH >ceil(cell_x))
+// 	{
+// 		if(i_map[ceil(cell_x)][ceil(cell_y)] == Cell::Wall)
+// 		{
+// 			output = 1;
+// 		}
+// 		else if(i_collect_pellets && i_map[ceil(cell_x)][ceil(cell_y)] == Cell::Pellet)
+// 		{
+// 			i_map[ceil(cell_x)][ceil(cell_y)] = Cell::Empty;
+// 		}
+// 	}
+	
+
+// 	return output;
+// }
+
 #include <array>
 #include <cmath>
 #include <iostream>
@@ -5,63 +74,79 @@
 #include "headers/global.hpp"
 #include "headers/map-collision.hpp"
 
-
 bool map_collision(bool i_collect_pellets, bool i_use_door, short i_x, short i_y, std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
 {
 	bool output = 0;
 
-	// Getting the exact position.
+	//Getting the exact position.
 	float cell_x = i_x / static_cast<float>(CELL_SIZE);
 	float cell_y = i_y / static_cast<float>(CELL_SIZE);
 
-	if(floor(cell_x) >= 0 && floor(cell_y) >= 0 && MAP_HEIGHT > floor(cell_y) && MAP_WIDTH >floor(cell_x))
+	//A ghost/Pacman can intersect 4 cells at most.
+	for (unsigned char a = 0; a < 4; a++)
 	{
-		if(i_map[floor(cell_x)][floor(cell_y)] == Cell::Wall)
-		{
-			output = 1;
-		}
-		else if(i_collect_pellets && i_map[floor(cell_x)][floor(cell_y)] == Cell::Pellet)
-		{
-			i_map[floor(cell_x)][floor(cell_y)] = Cell::Empty;
-		}
-	}
+		short x = 0;
+		short y = 0;
 
-	if(ceil(cell_x) >= 0 && floor(cell_y) >= 0 && MAP_HEIGHT > floor(cell_y) && MAP_WIDTH >ceil(cell_x))
-	{
-		if(i_map[ceil(cell_x)][floor(cell_y)] == Cell::Wall)
+		switch (a)
 		{
-			output = 1;
-		}
-		else if(i_collect_pellets && i_map[ceil(cell_x)][floor(cell_y)] == Cell::Pellet)
-		{
-			i_map[ceil(cell_x)][floor(cell_y)] = Cell::Empty;
-		}
-	}
+			case 0: //Top left cell
+			{
+				x = static_cast<short>(floor(cell_x));
+				y = static_cast<short>(floor(cell_y));
 
-	if(floor(cell_x) >= 0 && ceil(cell_y) >= 0 && MAP_HEIGHT > ceil(cell_y) && MAP_WIDTH >floor(cell_x))
-	{
-		if(i_map[floor(cell_x)][ceil(cell_y)] == Cell::Wall)
-		{
-			output = 1;
-		}
-		else if(i_collect_pellets && i_map[floor(cell_x)][ceil(cell_y)] == Cell::Pellet)
-		{
-			i_map[floor(cell_x)][ceil(cell_y)] = Cell::Empty;
-		}
-	}
+				break;
+			}
+			case 1: //Top right cell
+			{
+				x = static_cast<short>(ceil(cell_x));
+				y = static_cast<short>(floor(cell_y));
 
-	if(ceil(cell_x) >= 0 && ceil(cell_y) >= 0 && MAP_HEIGHT > ceil(cell_y) && MAP_WIDTH >ceil(cell_x))
-	{
-		if(i_map[ceil(cell_x)][ceil(cell_y)] == Cell::Wall)
-		{
-			output = 1;
+				break;
+			}
+			case 2: //Bottom left cell
+			{
+				x = static_cast<short>(floor(cell_x));
+				y = static_cast<short>(ceil(cell_y));
+
+				break;
+			}
+			case 3: //Bottom right cell
+			{
+				x = static_cast<short>(ceil(cell_x));
+				y = static_cast<short>(ceil(cell_y));
+			}
 		}
-		else if(i_collect_pellets && i_map[ceil(cell_x)][ceil(cell_y)] == Cell::Pellet)
+
+		//Making sure that the position is inside the map.
+		if (0 <= x && 0 <= y && MAP_HEIGHT > y && MAP_WIDTH > x)
 		{
-			i_map[ceil(cell_x)][ceil(cell_y)] = Cell::Empty;
+			if (!i_collect_pellets) //Here we only care about the walls.
+			{
+				if (Cell::Wall == i_map[x][y])
+				{
+					output = 1;
+				}
+				else if (!i_use_door && Cell::Door == i_map[x][y])
+				{
+					output = 1;
+				}
+			}
+			else //Here we only care about the collectables.
+			{
+				if (Cell::Energizer == i_map[x][y])
+				{
+					output = 1;
+
+					i_map[x][y] = Cell::Empty;
+				}
+				else if (Cell::Pellet == i_map[x][y])
+				{
+					i_map[x][y] = Cell::Empty;
+				}
+			}
 		}
 	}
-	
 
 	return output;
 }

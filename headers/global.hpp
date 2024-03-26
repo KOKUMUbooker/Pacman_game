@@ -12,7 +12,7 @@ constexpr unsigned short FRAME_DURATION = 16667;
 
 enum Cell
 {
-	Door,
+	Door=1,
 	Empty,
 	Energizer,
 	Pellet,
