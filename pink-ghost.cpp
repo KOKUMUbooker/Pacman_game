@@ -1,11 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <map>
+#include <iostream>
 
 #include "headers/global.hpp"
 #include "headers/set-optimal-direction.hpp"
 #include "headers/map-collision.hpp"
 #include "headers/pink-ghost.hpp"
+
+PinkGhost::PinkGhost():use_door{1} {}
 
 void PinkGhost::draw(sf::RenderWindow &i_window)
 {
@@ -20,16 +23,32 @@ void PinkGhost::set_position(short i_x,short i_y)
     position = {i_x,i_y};
 }
 
+void PinkGhost::set_target(short i_x,short i_y)
+{
+    target = {i_x,i_y};
+}
+
+void PinkGhost::set_home_exit(short i_x,short i_y)
+{
+    home_exit = {i_x,i_y};
+}
+
 void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman)
 {
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
-	walls[0] = map_collision(0, 1, GHOST_SPEED + position.x, position.y, i_map);
-	walls[1] = map_collision(0, 1, position.x, position.y - GHOST_SPEED, i_map);
-	walls[2] = map_collision(0, 1, position.x - GHOST_SPEED, position.y, i_map);
-	walls[3] = map_collision(0, 1, position.x, GHOST_SPEED + position.y, i_map);
+	walls[0] = map_collision(0, use_door, GHOST_SPEED + position.x, position.y, i_map);
+	walls[1] = map_collision(0, use_door, position.x, position.y - GHOST_SPEED, i_map);
+	walls[2] = map_collision(0, use_door, position.x - GHOST_SPEED, position.y, i_map);
+	walls[3] = map_collision(0, use_door, position.x, GHOST_SPEED + position.y, i_map);
     
-    set_optimal_direction(walls, direction,position ,i_pacman.getPosition());
+    target = use_door ? home_exit : i_pacman.getPosition() ;
+    if(position == home_exit)
+    {
+        use_door = 0; // Prevent re-entry to home
+        target = i_pacman.getPosition(); // Set new target
+    }
+    set_optimal_direction(walls, direction,position ,target);
 
     if(!walls[direction])
     {

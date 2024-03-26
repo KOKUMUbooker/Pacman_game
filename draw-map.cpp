@@ -31,7 +31,7 @@ void draw_map(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, 
                     cell_door.setPosition(CELL_SIZE * a, CELL_SIZE * b );
                     cell_door.setFillColor(sf::Color(138, 136, 137));
                     i_window.draw(cell_door);
-                    
+
                     break;
                 }
 

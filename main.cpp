@@ -48,7 +48,10 @@ int main(){
 	red_ghost.set_position(ghost_positions[0].x,ghost_positions[0].y);
 	pink_ghost.set_position(ghost_positions[1].x,ghost_positions[1].y);
 
-    // (16 * 21 * 2 = 672) Width , (16 * 16 * 21 = 5376) Height for sf::VideoMode
+	Position house_exit {ghost_positions[0].x, ghost_positions[0].y}; // Exit location to be used as initial target of ghosts within the house
+	pink_ghost.set_home_exit(house_exit.x, house_exit.y);
+    
+	// (16 * 21 * 2 = 672) Width , (16 * 16 * 21 = 5376) Height for sf::VideoMode
 	sf::RenderWindow window(sf::VideoMode(CELL_SIZE * MAP_WIDTH * SCREEN_RESIZE, (FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT) * SCREEN_RESIZE), "Pac-Man Game", sf::Style::Close);
 
 	// Sets the visible area of the window to the specified rectangle 
