@@ -49,9 +49,16 @@ void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
         is_out_of_house = 1;
         target = i_pacman.getPosition(); // Set new target
     }
-    else if(!use_door){
+    else if(!use_door)
+    {
         // The pink ghost targets 4 tiles ahead of pacman
-        // std::cout<< "===================== OUT ========================"<<std::endl;
+        Position pos = getMapCoordinatesInGrid(position);
+        std::cout<< "\n========================================= "<<std::endl;
+        std::cout<< "Actual coordinates x : "<<pos.x<<" y : "<<pos.y<<std::endl;
+        std::vector<Position> coordinates = getOptimalPathCoordinates(position,i_pacman.getPosition(),direction,i_map); 
+        std::cout<< "No of cells to get to target "<<std::to_string(coordinates.size())<<" 😎😎😎😎😎 "<<std::endl;
+        std::cout<< " ========================================= \n"<<std::endl;   
+
     }
     set_optimal_direction(walls, direction,position ,target);
 

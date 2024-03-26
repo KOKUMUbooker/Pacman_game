@@ -1,9 +1,11 @@
 #include <map>
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 #include "headers/global.hpp"
 #include "headers/set-optimal-direction.hpp"
+#include "headers/map-collision.hpp"
 
 short getDistApart(Position target,AvailablePositions current){
     short x = current.x - target.x;
@@ -12,10 +14,17 @@ short getDistApart(Position target,AvailablePositions current){
     return std::sqrt((std::pow(x,2)+std::pow(y,2)));
 }
 
+Position getMapCoordinatesInGrid(Position position){
+    short cell_x = ceil(position.x / CELL_SIZE);
+    short cell_y = ceil(position.y / CELL_SIZE);
+
+    return Position {static_cast<short>(cell_x * 16), static_cast<short>(cell_y *16)};
+};
+
 void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direction ,Position user_position, Position target_position)
 {
     std::map<unsigned char,AvailablePositions> available_paths {};
-    unsigned char direction {0};
+    std::cout << "User direction in set_optimal_direction fn: "<<std::to_string(user_direction)<<std::endl;
     
     // Loop to get number of all available paths based on current location
     for(unsigned char a = 0; a < 4; a++)
@@ -104,6 +113,83 @@ void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direc
              }
          }
     }
-
+    
+    std::cout<<" Direction in set_optimal_direction fn: "<< std::to_string(user_direction)<<"💥💥💥💥💥💥"<<std::endl;
     available_paths.clear();    
+}
+
+std::vector<Position> getOptimalPathCoordinates(Position user_position, Position target_position,unsigned char initial_user_dir ,std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> i_map)
+{
+   // 1) Will hold all optimal path coordinated till we reach the target
+    std::vector<Position> optimalCoordinates {};
+
+    Position position {user_position};
+    bool has_reached_target {0};
+    unsigned char direction {initial_user_dir};
+    int counter {1};
+   
+    // 2) As long as target has not been reached execute the function body
+    while (!has_reached_target) 
+    {
+        if(position == target_position){
+            has_reached_target = 1;
+            break;
+        } else {
+            counter++;
+        }
+
+        std::cout<<"\n ============= "<<std::to_string(counter) << "=================  "<<std::endl;
+        std::cout<<" old direction : "<<std::to_string(direction)<<std::endl;
+        // 0 = Right, 1 = Up, 2 = left, 3 = Down
+        std::array<bool, 4> walls{};
+        walls[0] = map_collision(0, 0, GHOST_SPEED + position.x, position.y, i_map);
+        walls[1] = map_collision(0, 0, position.x, position.y - GHOST_SPEED, i_map);
+        walls[2] = map_collision(0, 0, position.x - GHOST_SPEED, position.y, i_map);
+        walls[3] = map_collision(0, 0, position.x, GHOST_SPEED + position.y, i_map);
+    
+       // 3) Set optimal direction
+        set_optimal_direction(walls, direction, position ,target_position);
+        std::cout<<"Target x : "<<std::to_string(target_position.x)<<" y : "<<std::to_string(target_position.y)<<std::endl;
+        std::cout<<"Current location x : "<<std::to_string(user_position.x)<<" y : "<<std::to_string(user_position.y)<<std::endl;
+        std::cout<<" New direction : "<<std::to_string(direction)<<std::endl;
+        std::cout<<"Wall is present in new direction : "<<std::to_string(walls[direction])<<std::endl;
+     
+       // 4) Mover user by cell_size based on optimal direction
+       if(!walls[direction])
+       {
+            switch (direction)
+            {
+                case 0:
+                {
+                    position.x += GHOST_SPEED;  
+                    std::cout<<" New x postion in 0 case 🔢 : "<<std::to_string(position.x)<<std::endl;                  
+                    break;
+                }
+                case 1:
+                {
+                    position.y -= GHOST_SPEED;
+                    std::cout<<" New y postion in 1 case 🔢 : "<<std::to_string(position.y)<<std::endl;                  
+                    break;
+                }
+                case 2:
+                {
+                    position.x -= GHOST_SPEED;
+                    std::cout<<" New x postion in 2 case 🔢 : "<<std::to_string(position.x)<<std::endl;
+                    break;
+                }
+                case 3:
+                {
+                    position.y += GHOST_SPEED;
+                    std::cout<<" New y postion in 3 case 🔢 : "<<std::to_string(position.y)<<std::endl; 
+                    break;
+                }
+
+            }
+       }
+       std::cout<<"  ==============================  \n"<<std::endl;
+       optimalCoordinates.push_back(position);
+
+    }
+    
+   return optimalCoordinates;
 }

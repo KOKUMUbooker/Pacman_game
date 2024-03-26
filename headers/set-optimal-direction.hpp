@@ -11,3 +11,7 @@ short getDistApart(Position target,AvailablePositions current);
 // user_position = current position of the entity
 // target_position = current position of the target
 void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direction ,Position user_position, Position target_position);
+
+Position getMapCoordinatesInGrid(Position Position);
+
+std::vector<Position> getOptimalPathCoordinates(Position user_position, Position target_position,unsigned char initial_user_dir ,std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> i_map);
