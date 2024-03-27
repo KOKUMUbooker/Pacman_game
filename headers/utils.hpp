@@ -2,9 +2,9 @@
 
 #include <array>
 #include <map>
-#include "global.hpp"
 #include <string>
 #include <vector>
+#include "global.hpp"
 
 short getDistApart(Position target,AvailablePositions current);
 
@@ -20,4 +20,7 @@ std::string getStringDirection(unsigned char direction);
 
 std::vector<Position> getOptimalPathCoordinates(Position user_position, Position target_position,unsigned char initial_user_dir ,std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> i_map);
 
-Position solveQuadraticEquation(double d, const Position& knownCoord);
+double get_angle_between_perpendicular_height_and_vector( Position &vector_start, Position &vector_end);
+
+Position get_unknown_coordinate(const Position &known_position, double distance ,double angle_in_radians);
+

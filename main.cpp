@@ -96,7 +96,7 @@ int main(){
 		red_ghost.update(map,pacman);
 		pink_ghost.update(map,pacman);
 		blue_ghost.update(map,pacman,red_ghost.getPosition());
-		orange_ghost.update(map,pacman);
+		// orange_ghost.update(map,pacman);
 
         draw_map(map,window);
         

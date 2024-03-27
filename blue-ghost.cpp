@@ -34,7 +34,7 @@ void BlueGhost::set_home_exit(short i_x,short i_y)
     home_exit = {i_x,i_y};
 }
 
-void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,Position red_ghost_position)
+void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,Position i_red_ghost_position)
 {
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
@@ -79,15 +79,22 @@ void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
                 new_target.y -= CELL_SIZE * 2;
                 break;
             }
+        }
+
+        Position two_tiles_ahead_pacman = new_target;
 
         // 2) Create a vector to this new_target from the red_ghost and double it
-        short doubleDistanceApart = getDistApart(new_target,AvailablePositions {red_ghost_position.x,red_ghost_position.y}) * 2;
+        short doubleDistanceApart = getDistApart(two_tiles_ahead_pacman,AvailablePositions {i_red_ghost_position.x,i_red_ghost_position.y}) * 2;
 
         // 3) Retrieve coordinate of where it lands which will be the new target 
-        new_target = solveQuadraticEquation(doubleDistanceApart,red_ghost_position);
-        
-        target = new_target;
-        }
+               // i) Get angle between vector and perpendicular height
+               double angle = get_angle_between_perpendicular_height_and_vector(i_red_ghost_position,two_tiles_ahead_pacman);
+
+               // ii) Using this angle we can use SOH CAH TOA to get location of endpoint of vector
+               target = get_unknown_coordinate(i_red_ghost_position, doubleDistanceApart, angle);
+               set_target(target.x,target.y);
+               
+               std::cout<< "Target for Blue 🔵🔵  x :"<<target.x<<", y : "<<target.y<<std::endl;
     }
 
     set_optimal_direction(walls, direction, position ,target);

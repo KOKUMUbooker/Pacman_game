@@ -31,6 +31,47 @@ Position getMapCoordinatesInGrid(Position position){
     return Position {static_cast<short>(cell_x * 16), static_cast<short>(cell_y *16)};
 }
 
+double convertDegreesToRadians(double degrees) {
+  return degrees * M_PI / 180.0;
+}
+
+// NOTE: Returns angle in radians
+double get_angle_between_perpendicular_height_and_vector(Position &vector_start, Position &vector_end)
+{
+    short base {static_cast<short>(vector_end.x - vector_start.x)};
+    short height {static_cast<short>(vector_end.y - vector_start.y)};
+    double tan_value = static_cast<double>(base) / static_cast<double>(height);
+    
+    // Calculate the angle in radians
+    double angle_in_radians = atan(tan_value);
+
+    return angle_in_radians;
+}
+
+Position get_unknown_coordinate(const Position &known_position, double distance ,double angle_in_radians)
+{
+    // _________(a,b) distance_end_point
+    // ||     //
+    // ||    // 
+    // ||   //
+    // ||  //
+    // || //
+    // ||//
+    // (x,y) known_position
+
+    // 1) For the triangle formed by the distance end point and the known point : 
+    //    i)Get their base and height
+        double a = distance * sin(angle_in_radians);  // along x , thus is the base 
+        double b = distance * cos(angle_in_radians);  // along y , thus is the height
+
+    //    ii) Using the base and height we can now get coordinates of the distance end point
+        Position distance_end_point {};
+        distance_end_point.x = static_cast<short>(a) + known_position.x;
+        distance_end_point.y = static_cast<short>(b) + known_position.y;
+
+        return distance_end_point;
+}
+
 Position solveQuadraticEquation(short d, const Position& knownCoord) 
 {
         short dSquared = d * d;
