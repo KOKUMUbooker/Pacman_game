@@ -7,6 +7,8 @@ constexpr unsigned char SCREEN_RESIZE = 2;
 constexpr unsigned char FONT_HEIGHT = 16;
 constexpr unsigned char PACMAN_SPEED = 2;
 constexpr unsigned char GHOST_SPEED = 1;
+//If the distance between the orange ghost and Pacman is less than this value, the orange ghost will go into the scatter mode.
+constexpr unsigned char GHOST_3_CHASE = 4;
 
 constexpr unsigned short FRAME_DURATION = 16667;
 

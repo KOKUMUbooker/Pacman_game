@@ -24,6 +24,7 @@ void RedGhost::set_position(short i_x,short i_y)
 
 void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman)
 {
+    // Check for collision in all directions
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
 	walls[0] = map_collision(0, 0, GHOST_SPEED + position.x, position.y, i_map);
@@ -31,7 +32,8 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
 	walls[2] = map_collision(0, 0, position.x - GHOST_SPEED, position.y, i_map);
 	walls[3] = map_collision(0, 0, position.x, GHOST_SPEED + position.y, i_map);
 
-    set_optimal_direction(walls, direction ,position, i_pacman.getPosition());
+    // Set the optimal path based on accessible direction
+    set_optimal_direction(walls, direction , GHOST_SPEED ,position, i_pacman.getPosition());
 
     if(!walls[direction])
     {

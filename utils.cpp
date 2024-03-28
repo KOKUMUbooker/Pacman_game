@@ -72,36 +72,10 @@ Position get_unknown_coordinate(const Position &known_position, double distance 
         return distance_end_point;
 }
 
-Position solveQuadraticEquation(short d, const Position& knownCoord) 
-{
-        short dSquared = d * d;
-        short deltaX = 0.0;
-        short deltaY = 0.0;
-
-        // Solve the quadratic equation for deltaX^2 + deltaY^2 = d^2
-        // We solve for deltaX and deltaY separately
-
-        // Solve for deltaX
-        for (short potentialDeltaX = -d; potentialDeltaX <= d; potentialDeltaX += 0.1) {
-        short potentialDeltaYSquared = dSquared - potentialDeltaX * potentialDeltaX;
-        if (potentialDeltaYSquared >= 0) {
-            short potentialDeltaY = sqrt(potentialDeltaYSquared);
-            short distanceToKnownPoint = sqrt((potentialDeltaX - knownCoord.x) * (potentialDeltaX - knownCoord.x)
-                                            + (potentialDeltaY - knownCoord.y) * (potentialDeltaY - knownCoord.y));
-            if (abs(distanceToKnownPoint - d) < 0.0001) {  // Adjust epsilon as needed
-                deltaX = potentialDeltaX;
-                deltaY = potentialDeltaY;
-                break;
-            }
-        }
-        }
-
-        return Position {static_cast<short>(deltaX), static_cast<short>(deltaY)};
-        }
-
-void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direction ,Position user_position, Position target_position)
+void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direction ,unsigned char distance_offset ,Position user_position, Position target_position )
 {
     std::map<unsigned char,AvailablePositions> available_paths {};
+    // std::cout<<"Initial user_direction in set_optimal_direction fn : "<<std::to_string(user_direction)<<std::endl;
     
     // Loop to get number of all available paths based on current location
     for(unsigned char a = 0; a < 4; a++)
@@ -127,28 +101,28 @@ void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direc
             {
                 case 0:
                 {
-                    AvailablePositions position0{static_cast<short>(GHOST_SPEED + user_position.x),user_position.y};
+                    AvailablePositions position0{static_cast<short>(distance_offset + user_position.x),user_position.y};
                     position0.targetDist = getDistApart(target_position,position0);
                     available_paths.insert({0,position0});
                     break;
                 }
                 case 1:
                 {
-                    AvailablePositions position1{user_position.x, static_cast<short>(user_position.y - GHOST_SPEED)};
+                    AvailablePositions position1{user_position.x, static_cast<short>(user_position.y - distance_offset)};
                     position1.targetDist = getDistApart(target_position,position1);
                     available_paths.insert({1,position1});
                     break;
                 }
                 case 2:
                 {
-                    AvailablePositions position2{static_cast<short>(user_position.x - GHOST_SPEED), user_position.y};
+                    AvailablePositions position2{static_cast<short>(user_position.x - distance_offset), user_position.y};
                     position2.targetDist = getDistApart(target_position,position2);
                     available_paths.insert({2,position2});
                     break;
                 }
                 case 3:
                 {
-                    AvailablePositions position3{user_position.x, static_cast<short>(GHOST_SPEED + user_position.y)};
+                    AvailablePositions position3{user_position.x, static_cast<short>(distance_offset + user_position.y)};
                     position3.targetDist = getDistApart(target_position,position3);
                     available_paths.insert({3,position3});
                     break;
@@ -190,6 +164,7 @@ void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direc
              }
          }
     }
+    // std::cout<<"Final user_direction in set_optimal_direction fn : "<<std::to_string(user_direction)<<std::endl;
     
     available_paths.clear();    
 }
@@ -203,9 +178,9 @@ std::vector<Position> getOptimalPathCoordinates(Position user_position, Position
     bool has_reached_target {0};
     unsigned char direction {initial_user_dir};
     int counter {1};
-   
+
     // 2) As long as target has not been reached execute the function body
-    while (!has_reached_target) 
+    while (!has_reached_target)
     {
         if(position == target_position){
             has_reached_target = 1;
@@ -222,14 +197,14 @@ std::vector<Position> getOptimalPathCoordinates(Position user_position, Position
         walls[1] = map_collision(0, 0, position.x, position.y - GHOST_SPEED, i_map);
         walls[2] = map_collision(0, 0, position.x - GHOST_SPEED, position.y, i_map);
         walls[3] = map_collision(0, 0, position.x, GHOST_SPEED + position.y, i_map);
-    
+
        // 3) Set optimal direction
-        set_optimal_direction(walls, direction, position ,target_position);
+        set_optimal_direction(walls, direction, GHOST_SPEED,position ,target_position);
         std::cout<<"Target x : "<<std::to_string(target_position.x)<<" y : "<<std::to_string(target_position.y)<<std::endl;
         std::cout<<"Current location x : "<<std::to_string(user_position.x)<<" y : "<<std::to_string(user_position.y)<<std::endl;
         std::cout<<" New direction : "<<std::to_string(direction)<<std::endl;
         std::cout<<"Wall is present in new direction : "<<std::to_string(walls[direction])<<std::endl;
-     
+
        // 4) Mover user by cell_size based on optimal direction
        if(!walls[direction])
        {
@@ -237,26 +212,30 @@ std::vector<Position> getOptimalPathCoordinates(Position user_position, Position
             {
                 case 0:
                 {
-                    position.x += GHOST_SPEED;  
-                    std::cout<<" New x postion in 0 case 🔢 : "<<std::to_string(position.x)<<std::endl;                  
+                    position.x += GHOST_SPEED;
+                    std::cout<<" New x postion in 0 case 🔢 : "<<std::to_string(position.x)<<std::endl;
+                    direction = 0;
                     break;
                 }
                 case 1:
                 {
                     position.y -= GHOST_SPEED;
-                    std::cout<<" New y postion in 1 case 🔢 : "<<std::to_string(position.y)<<std::endl;                  
+                    direction = 1;
+                    std::cout<<" New y postion in 1 case 🔢 : "<<std::to_string(position.y)<<std::endl;
                     break;
                 }
                 case 2:
                 {
                     position.x -= GHOST_SPEED;
+                    direction = 2;
                     std::cout<<" New x postion in 2 case 🔢 : "<<std::to_string(position.x)<<std::endl;
                     break;
                 }
                 case 3:
                 {
                     position.y += GHOST_SPEED;
-                    std::cout<<" New y postion in 3 case 🔢 : "<<std::to_string(position.y)<<std::endl; 
+                    direction = 3;
+                    std::cout<<" New y postion in 3 case 🔢 : "<<std::to_string(position.y)<<std::endl;
                     break;
                 }
 
@@ -266,6 +245,6 @@ std::vector<Position> getOptimalPathCoordinates(Position user_position, Position
        optimalCoordinates.push_back(position);
 
     }
-    
+
    return optimalCoordinates;
 }

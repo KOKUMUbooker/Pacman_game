@@ -12,7 +12,7 @@ short getDistApart(Position target,AvailablePositions current);
 //         Thus collision checking on all directions MUST be done before using this function
 // user_position = current position of the entity
 // target_position = current position of the target
-void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direction ,Position user_position, Position target_position);
+void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direction, unsigned char distance_offset ,Position user_position, Position target_position);
 
 Position getMapCoordinatesInGrid(Position Position);
 

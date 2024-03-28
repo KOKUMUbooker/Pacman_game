@@ -94,10 +94,10 @@ void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
                target = get_unknown_coordinate(i_red_ghost_position, doubleDistanceApart, angle);
                set_target(target.x,target.y);
                
-               std::cout<< "Target for Blue 🔵🔵  x :"<<target.x<<", y : "<<target.y<<std::endl;
+            //    std::cout<< "Target for Blue 🔵🔵  x :"<<target.x<<", y : "<<target.y<<std::endl;
     }
 
-    set_optimal_direction(walls, direction, position ,target);
+    set_optimal_direction(walls, direction, GHOST_SPEED ,position ,target);
     
     if(!walls[direction])
     {

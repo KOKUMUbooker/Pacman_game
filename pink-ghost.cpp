@@ -82,13 +82,13 @@ void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
         }
 
         set_target(new_target.x,new_target.y);
-        std::cout<< "\n==================================================="<<std::endl;
-        std::cout<< "Target for Pink   x :"<<target.x<<", y : "<<target.y<<std::endl;
-        std::cout<< "Target for Red   x :"<<i_pacman.getPosition().x<<", y : "<<i_pacman.getPosition().y<<std::endl;        
-        std::cout<< "===================================================\n"<<std::endl;
+        // std::cout<< "\n==================================================="<<std::endl;
+        // std::cout<< "Target for Pink   x :"<<target.x<<", y : "<<target.y<<std::endl;
+        // std::cout<< "Target for Red   x :"<<i_pacman.getPosition().x<<", y : "<<i_pacman.getPosition().y<<std::endl;        
+        // std::cout<< "===================================================\n"<<std::endl;
     }
 
-    set_optimal_direction(walls, direction, position ,target);
+    set_optimal_direction(walls, direction, GHOST_SPEED,position ,target);
     
     if(!walls[direction])
     {

@@ -53,10 +53,18 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
     }
     else if(!use_door)
     {
-        // Once out logic for getting to pacman using his approach is implemented here
+         //The orange ghost will chase Pacman until it gets close to him. Then it'll switch to the scatter mode.
+        if (CELL_SIZE * GHOST_3_CHASE <= sqrt(pow(position.x - i_pacman.getPosition().x, 2) + pow(position.y - i_pacman.getPosition().y, 2)))
+		{
+			target = i_pacman.getPosition();
+		}
+		else
+		{
+			target = {0, CELL_SIZE * (MAP_HEIGHT - 1)};
+		}
     }
 
-    set_optimal_direction(walls, direction, position ,target);
+    set_optimal_direction(walls, direction, GHOST_SPEED ,position ,target);
     
     if(!walls[direction])
     {
