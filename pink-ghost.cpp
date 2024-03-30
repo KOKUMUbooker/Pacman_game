@@ -12,10 +12,18 @@ PinkGhost::PinkGhost():use_door{1},direction{0} {}
 
 void PinkGhost::draw(sf::RenderWindow &i_window)
 {
-    sf::CircleShape circle(CELL_SIZE / 2, 5);
-    circle.setFillColor(sf::Color(252, 3, 173));
-    circle.setPosition(position.x,position.y);
-    i_window.draw(circle);
+    sf::Texture texture;
+    texture.loadFromFile("./assets/pink-ghost.png");
+    //Setup our sprite with a texture
+    sf::Sprite sprite(texture);
+    sprite.setScale(0.55f,0.55f);
+    sprite.setPosition(position.x,position.y);
+    i_window.draw(sprite);
+
+    // sf::CircleShape circle(CELL_SIZE / 2, 5);
+    // circle.setFillColor(sf::Color(252, 3, 173));
+    // circle.setPosition(position.x,position.y);
+    // i_window.draw(circle);
 }
 
 void PinkGhost::set_position(short i_x,short i_y)
