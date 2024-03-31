@@ -6,6 +6,7 @@ class Pacman
 {
     Position position;
     unsigned char direction; // 0 = Right, 1 = Up, 2 = left, 3 = Down
+    short current_sprite_frame_edge = 0;
 
     public:
         void draw(sf::RenderWindow &i_window);

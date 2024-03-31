@@ -18,28 +18,21 @@ void RedGhost::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
     sprite.setPosition(position.x,position.y);
 
     // After a specified duration we change the sprite section currently in view
-    // if(animation_clock.getElapsedTime().asSeconds() > 0.1f)
-    // {
-    //     if(rectSourceSprite.left == current_sprite_frame_edge)
-    //     {
-    //         rectSourceSprite.left = 0 ;
-    //     }
-    //     else{
-    //         rectSourceSprite.left += SPRITE_GAME_CHARACTER_WIDTH ;
-    //     }
+    if(animation_clock.getElapsedTime().asSeconds() > 0.6f)
+    {
+        if(rectSourceSprite.left == current_sprite_frame_edge)
+        {
+            rectSourceSprite.left =  current_sprite_frame_edge - SPRITE_GAME_CHARACTER_WIDTH;
+        }
+        else{
+            rectSourceSprite.left = current_sprite_frame_edge ;
+        }
 
-    //     sprite.setTextureRect(rectSourceSprite);
-    //     animation_clock.restart();
-    // }
+        sprite.setTextureRect(rectSourceSprite);
+        animation_clock.restart();
+    }
 
     i_window.draw(sprite);
-
-    // Circle of radius = CELL_SIZE / 2 = 8
-    // sf::CircleShape circle(CELL_SIZE / 2);
-    // sf::CircleShape circle(CELL_SIZE / 2, 5);
-    // circle.setFillColor(sf::Color::Red);
-    // circle.setPosition(position.x,position.y);
-    // i_window.draw(circle);
 }
 
 void RedGhost::set_position(short i_x,short i_y)

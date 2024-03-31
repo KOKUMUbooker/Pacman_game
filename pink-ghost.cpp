@@ -19,12 +19,22 @@ void PinkGhost::draw(sf::RenderWindow &i_window,sf::Clock &animation_clock)
     sf::Sprite sprite(texture,rectSourceSprite);
     sprite.setScale(0.65f,0.65f);
     sprite.setPosition(position.x,position.y);
-       i_window.draw(sprite);
 
-    // sf::CircleShape circle(CELL_SIZE / 2, 5);
-    // circle.setFillColor(sf::Color(252, 3, 173));
-    // circle.setPosition(position.x,position.y);
-    // i_window.draw(circle);
+    // After a specified duration we change the sprite section currently in view
+    if(animation_clock.getElapsedTime().asSeconds() > 0.6f)
+    {
+        if(rectSourceSprite.left == current_sprite_frame_edge)
+        {
+            rectSourceSprite.left =  current_sprite_frame_edge - SPRITE_GAME_CHARACTER_WIDTH;
+        }
+        else{
+            rectSourceSprite.left = current_sprite_frame_edge ;
+        }
+
+        sprite.setTextureRect(rectSourceSprite);
+        animation_clock.restart();
+    }
+    i_window.draw(sprite);
 }
 
 void PinkGhost::set_position(short i_x,short i_y)
