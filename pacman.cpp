@@ -5,14 +5,33 @@
 #include "headers/pacman.hpp"
 #include "headers/map-collision.hpp"
 
-void Pacman::draw(sf::RenderWindow &i_window)
+void Pacman::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
 {
-    // Circle of radius = CELL_SIZE / 2 = 8
-    sf::CircleShape circle(CELL_SIZE / 2);
-    circle.setFillColor(sf::Color(255,255,0));
-    circle.setPosition(position.x,position.y);
+    sf::Texture texture;
+    texture.loadFromFile("./assets/sprite_sheets/pacman.png");
 
-    i_window.draw(circle);
+    sf::IntRect rectSourceSprite(current_sprite_frame_edge_x_axis,current_sprite_frame_top_distance,16,16);  // width = 24 , height = 24  
+    sf::Sprite sprite(texture,rectSourceSprite);
+    sprite.setPosition(position.x,position.y);
+
+    // After a specified duration we change the sprite section currently in view
+    if(animation_clock.getElapsedTime().asSeconds() > 0.1f)
+    {
+        if(rectSourceSprite.left == 48)
+        {
+            rectSourceSprite.left = 0 ;
+            current_sprite_frame_edge_x_axis = 0;
+        }
+        else{
+            rectSourceSprite.left += PACMAN_SPRITE_GAME_CHARACTER_WIDTH ;
+            current_sprite_frame_edge_x_axis += PACMAN_SPRITE_GAME_CHARACTER_WIDTH ;
+        }
+
+        sprite.setTextureRect(rectSourceSprite);
+        animation_clock.restart();
+    }
+
+    i_window.draw(sprite);
 }
 
 void Pacman::set_position(short i_x,short i_y)
@@ -68,27 +87,32 @@ void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
 		switch (direction)
 		{
 			case 0:
-			{
-				position.x += PACMAN_SPEED;
+            {
+                current_sprite_frame_top_distance = PACMAN_RIGHT_FRAME_END;
+                position.x += PACMAN_SPEED;
+                
+                break;
+            }
+            case 1:
+            {
+                current_sprite_frame_top_distance = PACMAN_UP_FRAME_END;
+                position.y -= PACMAN_SPEED;
 
-				break;
-			}
-			case 1:
-			{
-				position.y -= PACMAN_SPEED;
+                break;
+            }
+            case 2:
+            {
+                current_sprite_frame_top_distance = PACMAN_LEFT_FRAME_END;
+                position.x -= PACMAN_SPEED;
 
-				break;
-			}
-			case 2:
-			{
-				position.x -= PACMAN_SPEED;
+                break;
+            }
+            case 3:
+            {
+                current_sprite_frame_top_distance = PACMAN_DOWN_FRAME_END;
+                position.y += PACMAN_SPEED;
+            }
 
-				break;
-			}
-			case 3:
-			{
-				position.y += PACMAN_SPEED;
-			}
 		}
 	}
 

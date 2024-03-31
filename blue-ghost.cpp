@@ -22,7 +22,7 @@ void BlueGhost::draw(sf::RenderWindow &i_window,sf::Clock &animation_clock)
     sprite.setPosition(position.x,position.y);
 
     // After a specified duration we change the sprite section currently in view
-    if(animation_clock.getElapsedTime().asSeconds() > 0.6f)
+    if(animation_clock.getElapsedTime().asSeconds() > GHOST_FRAME_SWITCH_DURATION)
     {
         if(rectSourceSprite.left == current_sprite_frame_edge)
         {
