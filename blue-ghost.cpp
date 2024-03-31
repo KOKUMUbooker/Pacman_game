@@ -11,15 +11,16 @@
 
 BlueGhost::BlueGhost():use_door{1},direction{1} {}
 
-void BlueGhost::draw(sf::RenderWindow &i_window)
+void BlueGhost::draw(sf::RenderWindow &i_window,sf::Clock &animation_clock)
 {
     sf::Texture texture;
-    texture.loadFromFile("./assets/blue-ghost.png");
-    //Setup our sprite with a texture
-    sf::Sprite sprite(texture);
-    sprite.setScale(0.55f,0.55f);
+    texture.loadFromFile("./assets/sprite_sheets/blue_ghost.png");
+
+    sf::IntRect rectSourceSprite(current_sprite_frame_edge,0,24,24);  // width = 24 , height = 24  
+    sf::Sprite sprite(texture,rectSourceSprite);
+    sprite.setScale(0.65f,0.65f);
     sprite.setPosition(position.x,position.y);
-    i_window.draw(sprite);
+       i_window.draw(sprite);
 
     // sf::CircleShape circle(CELL_SIZE / 2, 5);
     // circle.setFillColor(sf::Color::Blue);
@@ -111,26 +112,30 @@ void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
     {
         switch (direction)
         {
-            case 0: // Right
+            case 0:
             {
+                current_sprite_frame_edge = GHOST_RIGHT_FRAME_END;
                 position.x += GHOST_SPEED;
                 
                 break;
             }
-            case 1:  // Up
+            case 1:
             {
+                current_sprite_frame_edge = GHOST_UP_FRAME_END;
                 position.y -= GHOST_SPEED;
 
                 break;
             }
-            case 2:  // Left
+            case 2:
             {
+                current_sprite_frame_edge = GHOST_LEFT_FRAME_END;
                 position.x -= GHOST_SPEED;
 
                 break;
             }
-            case 3:  // Down
+            case 3:
             {
+                current_sprite_frame_edge = GHOST_DOWN_FRAME_END;
                 position.y += GHOST_SPEED;
             }
 

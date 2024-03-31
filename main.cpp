@@ -67,6 +67,7 @@ int main(){
 	window.setFramerateLimit(60); // limit frame rate to 60fps
 
     sf::Event event; // Keeps track of events occurring within the window
+	sf::Clock animation_clock;
 
     // Game loop
     while (window.isOpen())
@@ -87,10 +88,11 @@ int main(){
         window.clear();
 
         pacman.draw(window);
-		red_ghost.draw(window);
-		pink_ghost.draw(window);
-		blue_ghost.draw(window);
-		orange_ghost.draw(window);
+		red_ghost.draw(window,animation_clock);
+		pink_ghost.draw(window,animation_clock);
+		blue_ghost.draw(window,animation_clock);
+		orange_ghost.draw(window,animation_clock);
+        draw_map(map,window);
 
         pacman.update(map);
 		red_ghost.update(map,pacman);
@@ -98,7 +100,6 @@ int main(){
 		blue_ghost.update(map,pacman,red_ghost.getPosition());
 		orange_ghost.update(map,pacman);
 
-        draw_map(map,window);
         
         window.display();
     }

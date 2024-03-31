@@ -7,17 +7,32 @@
 #include "headers/red-ghost.hpp"
 #include "headers/map-collision.hpp"
 
-void RedGhost::draw(sf::RenderWindow &i_window)
+void RedGhost::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
 {
     sf::Texture texture;
-    texture.loadFromFile("./assets/red-ghost.png");
-    //Setup our sprite with a texture
-    sf::Sprite sprite(texture);
-    sprite.setScale(0.55f,0.55f);
+    texture.loadFromFile("./assets/sprite_sheets/red_ghost.png");
+
+    sf::IntRect rectSourceSprite(current_sprite_frame_edge,0,24,24);  // width = 24 , height = 24  
+    sf::Sprite sprite(texture,rectSourceSprite);
+    sprite.setScale(0.65f,0.65f);
     sprite.setPosition(position.x,position.y);
+
+    // After a specified duration we change the sprite section currently in view
+    // if(animation_clock.getElapsedTime().asSeconds() > 0.1f)
+    // {
+    //     if(rectSourceSprite.left == current_sprite_frame_edge)
+    //     {
+    //         rectSourceSprite.left = 0 ;
+    //     }
+    //     else{
+    //         rectSourceSprite.left += SPRITE_GAME_CHARACTER_WIDTH ;
+    //     }
+
+    //     sprite.setTextureRect(rectSourceSprite);
+    //     animation_clock.restart();
+    // }
+
     i_window.draw(sprite);
-
-
 
     // Circle of radius = CELL_SIZE / 2 = 8
     // sf::CircleShape circle(CELL_SIZE / 2);
@@ -51,24 +66,28 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
         {
             case 0:
             {
+                current_sprite_frame_edge = GHOST_RIGHT_FRAME_END;
                 position.x += GHOST_SPEED;
                 
                 break;
             }
             case 1:
             {
+                current_sprite_frame_edge = GHOST_UP_FRAME_END;
                 position.y -= GHOST_SPEED;
 
                 break;
             }
             case 2:
             {
+                current_sprite_frame_edge = GHOST_LEFT_FRAME_END;
                 position.x -= GHOST_SPEED;
 
                 break;
             }
             case 3:
             {
+                current_sprite_frame_edge = GHOST_DOWN_FRAME_END;
                 position.y += GHOST_SPEED;
             }
 
