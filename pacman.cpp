@@ -5,6 +5,8 @@
 #include "headers/pacman.hpp"
 #include "headers/map-collision.hpp"
 
+Pacman::Pacman():dead{0}{}
+
 void Pacman::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
 {
     sf::Texture texture;
@@ -131,4 +133,9 @@ void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, 
 Position Pacman::getPosition()
 {
     return position;
+};
+
+bool Pacman::get_dead()
+{
+    return dead;
 };

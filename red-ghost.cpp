@@ -7,6 +7,8 @@
 #include "headers/red-ghost.hpp"
 #include "headers/map-collision.hpp"
 
+RedGhost::RedGhost():direction{0},use_door{0},current_sprite_frame_edge{0}{}
+
 void RedGhost::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
 {
     sf::Texture texture;

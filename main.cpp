@@ -23,6 +23,8 @@ int main(){
 	BlueGhost blue_ghost;
 	OrangeGhost orange_ghost;
 
+	bool game_won {0};
+
  	std::array<std::string, MAP_HEIGHT> map_sketch = {
 		" ################### ",
 		" #........#........# ",
@@ -101,6 +103,34 @@ int main(){
 			std::cout<<"Switching to chase Mode"<< std::endl;
 		}
 
+		// Check if there's atleast one pellet within the map to determine whether game has been won
+		if(game_won == 0 && pacman.get_dead() == 0)
+		{
+			game_won = 1;
+			for (const std::array<Cell, MAP_HEIGHT>& column : map)
+			{
+				for (const Cell& cell : column)
+				{
+					if (cell == Cell::Pellet) 
+					{
+						game_won = 0;
+						break;
+					}
+				}
+
+				if (0 == game_won)
+				{
+					break;
+				}
+			}
+
+			if (1 == game_won)
+			{
+				std::cout << "GAME WON 🎉🎉🎉🎉🎉🎉🎉"<<std::endl;
+			}
+		}
+
+		
         pacman.draw(window,pacman_animation_clock);
 		red_ghost.draw(window,red_animation_clock);
 		pink_ghost.draw(window,pink_animation_clock);
