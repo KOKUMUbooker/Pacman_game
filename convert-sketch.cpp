@@ -36,13 +36,13 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::ar
                 case '.':
                 {
                     output_map[b][a] = Cell::Pellet;
-                    // std::cout<<"Pellet found at ("<<std::to_string(b)<<","<<std::to_string(a)<<")"<<std::endl;
 
                     break;
                 }
-                case 'O':
+                case 'o':
                 {
                     output_map[b][a] = Cell::Energizer;
+                    // std::cout<<"Energizer found at ("<<std::to_string(b)<<","<<std::to_string(a)<<")"<<std::endl;
 
                     break;
                 }

@@ -43,6 +43,14 @@ void draw_map(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, 
                     i_window.draw(circle_shape);
                     break;
                 }
+                case Cell::Energizer:
+                {
+                    sf::CircleShape circle_shape(CELL_SIZE / 4);
+                    circle_shape.setPosition(CELL_SIZE * a + (CELL_SIZE / 2 - circle_shape.getRadius()), CELL_SIZE * b+ (CELL_SIZE / 2 - circle_shape.getRadius()));
+
+                    i_window.draw(circle_shape);
+                    break;
+                }
             }
 
             
