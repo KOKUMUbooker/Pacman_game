@@ -53,14 +53,14 @@ void BlueGhost::set_home_exit(short i_x,short i_y)
     home_exit = {i_x,i_y};
 }
 
-void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,Position i_red_ghost_position)
+void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,Position i_red_ghost_position, MovementMode &cur_movement_mode)
 {
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
-	walls[0] = map_collision(0, use_door, GHOST_SPEED + position.x, position.y, i_map);
-	walls[1] = map_collision(0, use_door, position.x, position.y - GHOST_SPEED, i_map);
-	walls[2] = map_collision(0, use_door, position.x - GHOST_SPEED, position.y, i_map);
-	walls[3] = map_collision(0, use_door, position.x, GHOST_SPEED + position.y, i_map);
+	walls[0] = map_collision(0, use_door, GHOST_SPEED + position.x, position.y, i_map,cur_movement_mode);
+	walls[1] = map_collision(0, use_door, position.x, position.y - GHOST_SPEED, i_map,cur_movement_mode);
+	walls[2] = map_collision(0, use_door, position.x - GHOST_SPEED, position.y, i_map,cur_movement_mode);
+	walls[3] = map_collision(0, use_door, position.x, GHOST_SPEED + position.y, i_map,cur_movement_mode);
     
     if(position == home_exit && use_door == 1)
     {
@@ -73,6 +73,12 @@ void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
     }
     else if(!use_door)
     {
+          if(cur_movement_mode == MovementMode::Scatter_mode)
+        {
+            target = BLUE_GHOST_SCATTER_TARGET;
+        }
+        else if(cur_movement_mode == MovementMode::Chase_mode)
+        {
         // 1) First the Blue ghost targets 2 tiles ahead of pacman
         Position new_target {i_pacman.getPosition().x, i_pacman.getPosition().y};
         
@@ -114,6 +120,7 @@ void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
                set_target(target.x,target.y);
                
             //    std::cout<< "Target for Blue 🔵🔵  x :"<<target.x<<", y : "<<target.y<<std::endl;
+        }
     }
 
     set_optimal_direction(walls, direction, GHOST_SPEED ,position ,target);

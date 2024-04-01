@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <array>
+#include <iostream>
 
 #include "headers/global.hpp"
 #include "headers/convert-sketch.hpp"
@@ -67,11 +68,15 @@ int main(){
 	window.setFramerateLimit(60); // limit frame rate to 60fps
 
     sf::Event event; // Keeps track of events occurring within the window
+	MovementMode movement_mode {MovementMode::Scatter_mode};
+
+	// Game timers
 	sf::Clock pacman_animation_clock;
 	sf::Clock blue_animation_clock;
 	sf::Clock red_animation_clock;
 	sf::Clock pink_animation_clock;
 	sf::Clock orange_animation_clock;
+	sf::Clock game_play_time;
 
     // Game loop
     while (window.isOpen())
@@ -91,17 +96,22 @@ int main(){
 
         window.clear();
 
+		if(game_play_time.getElapsedTime().asSeconds() > 7.0f && movement_mode != MovementMode::Chase_mode){
+			movement_mode = MovementMode::Chase_mode;
+			std::cout<<"Switching to chase Mode"<< std::endl;
+		}
+
         pacman.draw(window,pacman_animation_clock);
 		red_ghost.draw(window,red_animation_clock);
 		pink_ghost.draw(window,pink_animation_clock);
 		blue_ghost.draw(window,blue_animation_clock);
 		orange_ghost.draw(window,orange_animation_clock);
 
-        pacman.update(map);
-		red_ghost.update(map,pacman);
-		pink_ghost.update(map,pacman);
-		blue_ghost.update(map,pacman,red_ghost.getPosition());
-		orange_ghost.update(map,pacman);
+        pacman.update(map,movement_mode);
+		red_ghost.update(map,pacman,movement_mode);
+		pink_ghost.update(map,pacman,movement_mode);
+		blue_ghost.update(map,pacman,red_ghost.getPosition(),movement_mode);
+		orange_ghost.update(map,pacman,movement_mode);
 
         draw_map(map,window);
         

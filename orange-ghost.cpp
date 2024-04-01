@@ -52,14 +52,14 @@ void OrangeGhost::set_home_exit(short i_x,short i_y)
     home_exit = {i_x,i_y};
 }
 
-void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman)
+void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman, MovementMode &cur_movement_mode)
 {
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
-	walls[0] = map_collision(0, use_door, GHOST_SPEED + position.x, position.y, i_map);
-	walls[1] = map_collision(0, use_door, position.x, position.y - GHOST_SPEED, i_map);
-	walls[2] = map_collision(0, use_door, position.x - GHOST_SPEED, position.y, i_map);
-	walls[3] = map_collision(0, use_door, position.x, GHOST_SPEED + position.y, i_map);
+	walls[0] = map_collision(0, use_door, GHOST_SPEED + position.x, position.y, i_map,cur_movement_mode);
+	walls[1] = map_collision(0, use_door, position.x, position.y - GHOST_SPEED, i_map,cur_movement_mode);
+	walls[2] = map_collision(0, use_door, position.x - GHOST_SPEED, position.y, i_map,cur_movement_mode);
+	walls[3] = map_collision(0, use_door, position.x, GHOST_SPEED + position.y, i_map,cur_movement_mode);
     
     if(position == home_exit && use_door == 1)
     {
@@ -72,15 +72,21 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
     }
     else if(!use_door)
     {
-         //The orange ghost will chase Pacman until it gets close to him. Then it'll switch to the scatter mode.
-        if (CELL_SIZE * GHOST_3_CHASE <= sqrt(pow(position.x - i_pacman.getPosition().x, 2) + pow(position.y - i_pacman.getPosition().y, 2)))
-		{
-			target = i_pacman.getPosition();
-		}
-		else
-		{
-			target = {0, CELL_SIZE * (MAP_HEIGHT - 1)};
-		}
+        if(cur_movement_mode == MovementMode::Scatter_mode)
+        {
+            target = oORANGE_GHOST_SCATTER_TARGET;
+        }else if(cur_movement_mode == MovementMode::Chase_mode)
+        {
+            //The orange ghost will chase Pacman until it gets close to him. Then it'll switch to the scatter mode.
+            if (CELL_SIZE * GHOST_3_CHASE <= sqrt(pow(position.x - i_pacman.getPosition().x, 2) + pow(position.y - i_pacman.getPosition().y, 2)))
+            {
+                target = i_pacman.getPosition();
+            }
+            else
+            {
+                target = {0, CELL_SIZE * (MAP_HEIGHT - 1)};
+            }
+        }
     }
 
     set_optimal_direction(walls, direction, GHOST_SPEED ,position ,target);

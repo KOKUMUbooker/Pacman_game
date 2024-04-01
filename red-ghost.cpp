@@ -40,18 +40,27 @@ void RedGhost::set_position(short i_x,short i_y)
     position = {i_x,i_y};
 }
 
-void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman)
+void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,MovementMode &cur_movement_mode)
 {
     // Check for collision in all directions
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
-	walls[0] = map_collision(0, 0, GHOST_SPEED + position.x, position.y, i_map);
-	walls[1] = map_collision(0, 0, position.x, position.y - GHOST_SPEED, i_map);
-	walls[2] = map_collision(0, 0, position.x - GHOST_SPEED, position.y, i_map);
-	walls[3] = map_collision(0, 0, position.x, GHOST_SPEED + position.y, i_map);
+	walls[0] = map_collision(0, 0, GHOST_SPEED + position.x, position.y, i_map,cur_movement_mode);
+	walls[1] = map_collision(0, 0, position.x, position.y - GHOST_SPEED, i_map,cur_movement_mode);
+	walls[2] = map_collision(0, 0, position.x - GHOST_SPEED, position.y, i_map,cur_movement_mode);
+	walls[3] = map_collision(0, 0, position.x, GHOST_SPEED + position.y, i_map,cur_movement_mode);
 
+    Position target;
+    if(cur_movement_mode == MovementMode::Chase_mode)
+    {
+        target = i_pacman.getPosition();
+    }
+    else if(cur_movement_mode == MovementMode::Scatter_mode)
+    {
+        target = RED_GHOST_SCATTER_TARGET;
+    }
     // Set the optimal path based on accessible direction
-    set_optimal_direction(walls, direction , GHOST_SPEED ,position, i_pacman.getPosition());
+    set_optimal_direction(walls, direction , GHOST_SPEED ,position, target);
 
     if(!walls[direction])
     {

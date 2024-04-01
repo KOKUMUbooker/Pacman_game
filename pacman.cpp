@@ -44,14 +44,14 @@ unsigned char Pacman::getDirection()
     return direction;
 }
 
-void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
+void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, MovementMode &cur_movement_mode)
 {
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
-	walls[0] = map_collision(0, 0, PACMAN_SPEED + position.x, position.y, i_map);
-	walls[1] = map_collision(0, 0, position.x, position.y - PACMAN_SPEED, i_map);
-	walls[2] = map_collision(0, 0, position.x - PACMAN_SPEED, position.y, i_map);
-	walls[3] = map_collision(0, 0, position.x, PACMAN_SPEED + position.y, i_map);
+	walls[0] = map_collision(0, 0, PACMAN_SPEED + position.x, position.y, i_map,cur_movement_mode);
+	walls[1] = map_collision(0, 0, position.x, position.y - PACMAN_SPEED, i_map,cur_movement_mode);
+	walls[2] = map_collision(0, 0, position.x - PACMAN_SPEED, position.y, i_map,cur_movement_mode);
+	walls[3] = map_collision(0, 0, position.x, PACMAN_SPEED + position.y, i_map,cur_movement_mode);
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {   
@@ -125,7 +125,7 @@ void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
         position.x = PACMAN_SPEED - CELL_SIZE;
 	}
 
-    map_collision(1, 0, position.x, position.y, i_map);
+    map_collision(1, 0, position.x, position.y, i_map,cur_movement_mode);
 }
 
 Position Pacman::getPosition()

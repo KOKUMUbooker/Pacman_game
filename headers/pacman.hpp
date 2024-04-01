@@ -12,7 +12,7 @@ class Pacman
     public:
         void draw(sf::RenderWindow &i_window, sf::Clock &animation_clock);
         void set_position(short i_x ,short i_y);
-        void update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map);
+        void update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, MovementMode &cur_movement_mode);
         Position getPosition();
         unsigned char getDirection();
 };

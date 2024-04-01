@@ -19,5 +19,5 @@ class PinkGhost
         void set_position(short i_x ,short i_y);
         void set_target(short i_x ,short i_y);
         void set_home_exit(short i_x ,short i_y);
-        void update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman);
+        void update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,MovementMode &cur_movement_mode);
 };
