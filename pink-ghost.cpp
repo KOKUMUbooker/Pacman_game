@@ -10,18 +10,20 @@
 
 PinkGhost::PinkGhost():use_door{1},direction{0} {}
 
-void PinkGhost::draw(sf::RenderWindow &i_window,sf::Clock &animation_clock)
+void PinkGhost::draw(sf::RenderWindow &i_window,sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
 {
     sf::Texture texture;
     texture.loadFromFile("./assets/sprite_sheets/pink_ghost.png");
+    if(cur_movement_mode == MovementMode::Frightened_mode)  current_sprite_frame_edge = GHOST_FRIGHTENED_FRAME_END ;
 
     sf::IntRect rectSourceSprite(current_sprite_frame_edge,0,24,24);  // width = 24 , height = 24  
     sf::Sprite sprite(texture,rectSourceSprite);
     sprite.setScale(0.65f,0.65f);
     sprite.setPosition(position.x,position.y);
+    ghost_sprite = sprite;
 
     // After a specified duration we change the sprite section currently in view
-    if(animation_clock.getElapsedTime().asSeconds() > GHOST_FRAME_SWITCH_DURATION)
+    if(animation_clock.getElapsedTime().asSeconds() > GHOST_FRAME_SWITCH_DURATION && cur_movement_mode != MovementMode::Frightened_mode)
     {
         if(rectSourceSprite.left == current_sprite_frame_edge)
         {
@@ -60,6 +62,20 @@ void PinkGhost::set_home(short i_x,short i_y)
 
 void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman, MovementMode &cur_movement_mode)
 {
+    // Check for collision with pacman
+    if(sprite_collision(ghost_sprite,i_pacman.get_pacman_sprite()))
+    {
+        if(cur_movement_mode == MovementMode::Frightened_mode)
+        {
+            reset();
+        }
+        else
+        {
+            i_pacman.set_dead(1);
+        }
+        target = {static_cast<short>((rand() % 21) * CELL_SIZE) , static_cast<short>((rand() % 21) * CELL_SIZE)};
+    }
+
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
 	walls[0] = map_collision(0, use_door, GHOST_SPEED + position.x, position.y, i_map);

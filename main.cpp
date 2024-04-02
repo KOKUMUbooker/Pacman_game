@@ -156,17 +156,18 @@ int main(){
 
 			if(!game_won)
 			{
+				pacman.draw(window,pacman_animation_clock);
+				red_ghost.draw(window,red_animation_clock,movement_mode);
+				pink_ghost.draw(window,pink_animation_clock,movement_mode);
+				blue_ghost.draw(window,blue_animation_clock,movement_mode);
+				orange_ghost.draw(window,orange_animation_clock,movement_mode);
+
 				pacman.update(map,movement_mode);
 				red_ghost.update(map,pacman,movement_mode);
 				pink_ghost.update(map,pacman,movement_mode);
 				blue_ghost.update(map,pacman,red_ghost.getPosition(),movement_mode);
 				orange_ghost.update(map,pacman,movement_mode);
 
-				pacman.draw(window,pacman_animation_clock);
-				red_ghost.draw(window,red_animation_clock);
-				pink_ghost.draw(window,pink_animation_clock);
-				blue_ghost.draw(window,blue_animation_clock);
-				orange_ghost.draw(window,orange_animation_clock);
        		 	draw_map(map,window);
 			}
 		}

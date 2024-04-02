@@ -13,6 +13,7 @@ constexpr short SPRITE_GAME_CHARACTER_WIDTH {24}; // Size of each frame in each 
 constexpr short PACMAN_SPRITE_GAME_CHARACTER_WIDTH {16}; // Size of each frame for the pacman sheets 
 
 constexpr float GHOST_FRAME_SWITCH_DURATION {0.3f};
+constexpr float GHOST_FRIGHTENED_FRAME_SWITCH_DURATION {0.6f};
 
 // Frame limits for ghost sprites based on direction
 constexpr short GHOST_UP_FRAME_END {168};
@@ -20,13 +21,16 @@ constexpr short GHOST_DOWN_FRAME_END {72};
 constexpr short GHOST_LEFT_FRAME_END {120};
 constexpr short GHOST_RIGHT_FRAME_END {24};
 
+constexpr short GHOST_FRIGHTENED_FRAME_END {240};
+constexpr short GHOST_FRIGHTENED_FRAME_START {192};
+
 // Frame height level limits for pacman sprite based on direction
 constexpr short PACMAN_UP_FRAME_END {16};
 constexpr short PACMAN_DOWN_FRAME_END {48};
 constexpr short PACMAN_LEFT_FRAME_END {32};
 constexpr short PACMAN_RIGHT_FRAME_END {0};
 
-constexpr unsigned short PACMAN_ENERGIZED_DURATION {512};
+constexpr unsigned short PACMAN_ENERGIZED_DURATION {1024};
 
 enum Cell
 {

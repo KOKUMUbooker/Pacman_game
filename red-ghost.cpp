@@ -10,10 +10,11 @@
 
 RedGhost::RedGhost():direction{0},use_door{0},current_sprite_frame_edge{0}{}
 
-void RedGhost::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
+void RedGhost::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
 {
     sf::Texture texture;
-    texture.loadFromFile("./assets/sprite_sheets/red_ghost.png");
+    texture.loadFromFile("./assets/sprite_sheets/red_ghost.png"); 
+    if(cur_movement_mode == MovementMode::Frightened_mode)  current_sprite_frame_edge = GHOST_FRIGHTENED_FRAME_END ;
 
     sf::IntRect rectSourceSprite(current_sprite_frame_edge,0,24,24);  // width = 24 , height = 24  
     sf::Sprite sprite(texture,rectSourceSprite);
@@ -22,14 +23,14 @@ void RedGhost::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
     ghost_sprite = sprite;
 
     // After a specified duration we change the sprite section currently in view
-    if(animation_clock.getElapsedTime().asSeconds() > GHOST_FRAME_SWITCH_DURATION)
+ if (animation_clock.getElapsedTime().asSeconds() > GHOST_FRAME_SWITCH_DURATION && cur_movement_mode != MovementMode::Frightened_mode)
     {
         if(rectSourceSprite.left == current_sprite_frame_edge)
         {
             rectSourceSprite.left =  current_sprite_frame_edge - SPRITE_GAME_CHARACTER_WIDTH;
         }
         else{
-            rectSourceSprite.left = current_sprite_frame_edge ;
+            rectSourceSprite.left = current_sprite_frame_edge;
         }
 
         sprite.setTextureRect(rectSourceSprite);
@@ -54,8 +55,15 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
     // Check for collision with pacman
     if(sprite_collision(ghost_sprite,i_pacman.get_pacman_sprite()))
     {
-        std::cout<< "Pacman and red ghost collided 💣💣💣💣💣💣💣💣"<<std::endl;
-        i_pacman.set_dead(1);
+        if(cur_movement_mode == MovementMode::Frightened_mode)
+        {
+            reset();
+        }
+        else
+        {
+            i_pacman.set_dead(1);
+        }
+        target = {static_cast<short>((rand() % 21) * CELL_SIZE) , static_cast<short>((rand() % 21) * CELL_SIZE)};
     }
 
     // Check for collision in all directions
