@@ -92,6 +92,8 @@ int main(){
     // Game loop
     while (window.isOpen())
     {
+		window.clear();
+
         // Handle events
         while (window.pollEvent(event))
 		{
@@ -106,17 +108,17 @@ int main(){
 				{
 					if(event.key.code == sf::Keyboard::Enter && (game_won || pacman.get_dead()))
 					{
-						std::cout << "Trying to reset game"<<std::endl;
+						std::cout << "Trying to reset game 🔁🔁🔁🔁🔁🔁🔁🔁"<<std::endl;
 						// Reset the game
 						movement_mode = MovementMode::Scatter_mode;
 						game_won = 0;
-						map = convert_sketch(map_sketch, ghost_positions, pacman);
+						pacman.reset();
 						red_ghost.reset();
 						pink_ghost.reset();
 						blue_ghost.reset();
 						orange_ghost.reset();
-						pacman.reset();
 						game_play_time.restart();
+						map = convert_sketch(map_sketch, ghost_positions, pacman);
 						draw_map(map,window);
 						continue;
 					}
@@ -124,17 +126,17 @@ int main(){
 			}
 		}
 
-        window.clear();
 
-		if(game_play_time.getElapsedTime().asSeconds() > 7.0f && movement_mode != MovementMode::Chase_mode){
-			movement_mode = MovementMode::Chase_mode;
-			std::cout<<"Switching to chase Mode"<< std::endl;
-		}
-
-		// Check if there's atleast one pellet within the map to determine whether game has been won
 		if(!game_won && pacman.get_dead() == 0)
 		{
+			// Timer to determine when to switch movement mode
+			if(game_play_time.getElapsedTime().asSeconds() > 7.0f && movement_mode != MovementMode::Chase_mode){
+				movement_mode = MovementMode::Chase_mode;
+				std::cout<<"Switching to chase Mode"<< std::endl;
+			}
+
 			game_won = 1;
+			// Check if there's atleast one pellet within the map to determine whether game has been won
 			for (const std::array<Cell, MAP_HEIGHT>& column : map)
 			{
 				for (const Cell& cell : column)
@@ -168,8 +170,7 @@ int main(){
        		 	draw_map(map,window);
 			}
 		}
-
-		if (game_won)
+		else if (game_won)
 		{
 			// std::cout << "GAME WON 🎉🎉🎉🎉🎉🎉🎉"<<std::endl;
 			sf::Text text("GAME WON\nHit Enter to play again",font,16);
@@ -179,9 +180,10 @@ int main(){
 		}
 		else if (pacman.get_dead())
 		{
-			std::cout << "GAME LOST 😵😵😵😵😵😵😵"<<std::endl;
-			sf::Text text("GAME OVER",font,16);
-			text.move(0.0f,0.0f);
+			// std::cout << "GAME LOST 😵😵😵😵😵😵😵"<<std::endl;
+			sf::Text text("GAME OVER\nHit Enter to play again",font,16);
+			text.setFillColor(sf::Color::Red);
+			text.move(75.0f,170.0f);
 			window.draw(text);
 		}
     

@@ -15,6 +15,7 @@ void Pacman::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
     sf::IntRect rectSourceSprite(current_sprite_frame_edge_x_axis,current_sprite_frame_top_distance,16,16);  // width = 24 , height = 24  
     sf::Sprite sprite(texture,rectSourceSprite);
     sprite.setPosition(position.x,position.y);
+    pacman_sprite = sprite;
 
     // After a specified duration we change the sprite section currently in view
     if(animation_clock.getElapsedTime().asSeconds() > 0.1f)
@@ -52,6 +53,12 @@ void Pacman::reset()
     dead = 0;
     current_sprite_frame_edge_x_axis = 0;
     current_sprite_frame_top_distance = 0;
+    position = home;
+}
+
+void Pacman::set_home(short i_x,short i_y)
+{
+    home = {i_x,i_y};
 }
 
 void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, MovementMode &cur_movement_mode)
@@ -147,3 +154,13 @@ bool Pacman::get_dead()
 {
     return dead;
 };
+
+void Pacman::set_dead(bool is_dead)
+{
+    dead = is_dead;
+}
+
+sf::Sprite Pacman::get_pacman_sprite()
+{
+    return pacman_sprite;
+}

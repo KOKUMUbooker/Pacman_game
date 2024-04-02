@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <map>
+#include <iostream>
 
 #include "headers/global.hpp"
 #include "headers/utils.hpp"
@@ -18,6 +19,7 @@ void RedGhost::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
     sf::Sprite sprite(texture,rectSourceSprite);
     sprite.setScale(0.65f,0.65f);
     sprite.setPosition(position.x,position.y);
+    ghost_sprite = sprite;
 
     // After a specified duration we change the sprite section currently in view
     if(animation_clock.getElapsedTime().asSeconds() > GHOST_FRAME_SWITCH_DURATION)
@@ -49,6 +51,13 @@ void RedGhost::set_home(short i_x,short i_y)
 
 void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,MovementMode &cur_movement_mode)
 {
+    // Check for collision with pacman
+    if(sprite_collision(ghost_sprite,i_pacman.get_pacman_sprite()))
+    {
+        std::cout<< "Pacman and red ghost collided 💣💣💣💣💣💣💣💣"<<std::endl;
+        i_pacman.set_dead(1);
+    }
+
     // Check for collision in all directions
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
@@ -57,7 +66,6 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
 	walls[2] = map_collision(0, 0, position.x - GHOST_SPEED, position.y, i_map,cur_movement_mode);
 	walls[3] = map_collision(0, 0, position.x, GHOST_SPEED + position.y, i_map,cur_movement_mode);
 
-    Position target;
     if(cur_movement_mode == MovementMode::Chase_mode)
     {
         target = i_pacman.getPosition();
@@ -121,4 +129,6 @@ Position RedGhost::getPosition()
 void RedGhost::reset()
 {
     position = home;
+    direction = 0;
+    target = RED_GHOST_SCATTER_TARGET;
 }

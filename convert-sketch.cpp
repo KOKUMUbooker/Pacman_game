@@ -50,6 +50,7 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::ar
                 {
                     // b = how far along the x-axis, a = how far along the y-axis
                     i_pacman.set_position(CELL_SIZE * b,CELL_SIZE * a);
+                    i_pacman.set_home(CELL_SIZE * b,CELL_SIZE * a);
 
                     break;
                 }
