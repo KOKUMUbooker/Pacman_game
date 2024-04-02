@@ -62,10 +62,10 @@ void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
 {
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
-	walls[0] = map_collision(0, use_door, GHOST_SPEED + position.x, position.y, i_map,cur_movement_mode);
-	walls[1] = map_collision(0, use_door, position.x, position.y - GHOST_SPEED, i_map,cur_movement_mode);
-	walls[2] = map_collision(0, use_door, position.x - GHOST_SPEED, position.y, i_map,cur_movement_mode);
-	walls[3] = map_collision(0, use_door, position.x, GHOST_SPEED + position.y, i_map,cur_movement_mode);
+	walls[0] = map_collision(0, use_door, GHOST_SPEED + position.x, position.y, i_map);
+	walls[1] = map_collision(0, use_door, position.x, position.y - GHOST_SPEED, i_map);
+	walls[2] = map_collision(0, use_door, position.x - GHOST_SPEED, position.y, i_map);
+	walls[3] = map_collision(0, use_door, position.x, GHOST_SPEED + position.y, i_map);
     
     if(position == home_exit && use_door == 1)
     {
