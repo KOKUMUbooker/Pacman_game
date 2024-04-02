@@ -72,7 +72,6 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
         {
             i_pacman.set_dead(1);
         }
-        target = {static_cast<short>((rand() % 21) * CELL_SIZE) , static_cast<short>((rand() % 21) * CELL_SIZE)};
     }
 
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
