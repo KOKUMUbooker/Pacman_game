@@ -53,6 +53,11 @@ void BlueGhost::set_home_exit(short i_x,short i_y)
     home_exit = {i_x,i_y};
 }
 
+void BlueGhost::set_home(short i_x ,short i_y)
+{
+    home = {i_x,i_y};
+}
+
 void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,Position i_red_ghost_position, MovementMode &cur_movement_mode)
 {
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
@@ -167,4 +172,12 @@ void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
 	{
         position.x = PACMAN_SPEED - CELL_SIZE;
 	}
+}
+
+void BlueGhost::reset()
+{
+    use_door = 1;
+    direction = 1;
+    position = home;
+    target = home_exit;
 }

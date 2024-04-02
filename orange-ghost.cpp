@@ -52,6 +52,11 @@ void OrangeGhost::set_home_exit(short i_x,short i_y)
     home_exit = {i_x,i_y};
 }
 
+void OrangeGhost::set_home(short i_x,short i_y)
+{
+    home = {i_x,i_y};
+}
+
 void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman, MovementMode &cur_movement_mode)
 {
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
@@ -133,4 +138,12 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
 	{
         position.x = PACMAN_SPEED - CELL_SIZE;
 	}
+}
+
+void OrangeGhost::reset()
+{
+    use_door = 1;
+    direction = 2;
+    position = home;
+    target = home_exit;
 }

@@ -10,6 +10,7 @@ class BlueGhost
     bool use_door;
     Position target;
 	Position home_exit;
+    Position home;
     short current_sprite_frame_edge = 0;
 
     public:
@@ -18,5 +19,7 @@ class BlueGhost
         void set_position(short i_x ,short i_y);
         void set_target(short i_x ,short i_y);
         void set_home_exit(short i_x ,short i_y);
+        void set_home(short i_x ,short i_y);
+        void reset();
         void update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,Position i_red_ghost_position,MovementMode &cur_movement_mode);
 };

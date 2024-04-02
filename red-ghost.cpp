@@ -42,6 +42,11 @@ void RedGhost::set_position(short i_x,short i_y)
     position = {i_x,i_y};
 }
 
+void RedGhost::set_home(short i_x,short i_y)
+{
+    home = {i_x,i_y};
+}
+
 void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,MovementMode &cur_movement_mode)
 {
     // Check for collision in all directions
@@ -112,3 +117,8 @@ Position RedGhost::getPosition()
 {
     return position;
 };
+
+void RedGhost::reset()
+{
+    position = home;
+}

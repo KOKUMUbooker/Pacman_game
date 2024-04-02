@@ -17,6 +17,9 @@ int main(){
 	//Initial ghost positions.
 	std::array<Position, 4> ghost_positions;
 
+	sf::Font font;
+	font.loadFromFile("./assets/fonts/Adventuring.ttf");
+
 	// Ghosts
 	RedGhost red_ghost;
 	PinkGhost pink_ghost;
@@ -57,6 +60,12 @@ int main(){
 	blue_ghost.set_position(ghost_positions[2].x,ghost_positions[2].y);
 	orange_ghost.set_position(ghost_positions[3].x,ghost_positions[3].y);
 
+	// Setting their home origins
+	red_ghost.set_home(ghost_positions[0].x,ghost_positions[0].y);
+	pink_ghost.set_home(ghost_positions[1].x,ghost_positions[1].y);
+	blue_ghost.set_home(ghost_positions[2].x,ghost_positions[2].y);
+	orange_ghost.set_home(ghost_positions[3].x,ghost_positions[3].y);
+
 	Position house_exit {ghost_positions[0].x, ghost_positions[0].y}; // Exit location to be used as initial target of ghosts within the house
 	pink_ghost.set_home_exit(house_exit.x, house_exit.y);
 	blue_ghost.set_home_exit(house_exit.x, house_exit.y);
@@ -93,6 +102,25 @@ int main(){
 					//Making sure the player can close the window.
 					window.close();
 				}
+				case sf::Event::KeyPressed:
+				{
+					if(event.key.code == sf::Keyboard::Enter && (game_won || pacman.get_dead()))
+					{
+						std::cout << "Trying to reset game"<<std::endl;
+						// Reset the game
+						movement_mode = MovementMode::Scatter_mode;
+						game_won = 0;
+						map = convert_sketch(map_sketch, ghost_positions, pacman);
+						red_ghost.reset();
+						pink_ghost.reset();
+						blue_ghost.reset();
+						orange_ghost.reset();
+						pacman.reset();
+						game_play_time.restart();
+						draw_map(map,window);
+						continue;
+					}
+				}
 			}
 		}
 
@@ -104,7 +132,7 @@ int main(){
 		}
 
 		// Check if there's atleast one pellet within the map to determine whether game has been won
-		if(game_won == 0 && pacman.get_dead() == 0)
+		if(!game_won && pacman.get_dead() == 0)
 		{
 			game_won = 1;
 			for (const std::array<Cell, MAP_HEIGHT>& column : map)
@@ -124,27 +152,39 @@ int main(){
 				}
 			}
 
-			if (1 == game_won)
+			if(!game_won)
 			{
-				std::cout << "GAME WON 🎉🎉🎉🎉🎉🎉🎉"<<std::endl;
+				pacman.update(map,movement_mode);
+				red_ghost.update(map,pacman,movement_mode);
+				pink_ghost.update(map,pacman,movement_mode);
+				blue_ghost.update(map,pacman,red_ghost.getPosition(),movement_mode);
+				orange_ghost.update(map,pacman,movement_mode);
+
+				pacman.draw(window,pacman_animation_clock);
+				red_ghost.draw(window,red_animation_clock);
+				pink_ghost.draw(window,pink_animation_clock);
+				blue_ghost.draw(window,blue_animation_clock);
+				orange_ghost.draw(window,orange_animation_clock);
+       		 	draw_map(map,window);
 			}
 		}
 
-		
-        pacman.draw(window,pacman_animation_clock);
-		red_ghost.draw(window,red_animation_clock);
-		pink_ghost.draw(window,pink_animation_clock);
-		blue_ghost.draw(window,blue_animation_clock);
-		orange_ghost.draw(window,orange_animation_clock);
-
-        pacman.update(map,movement_mode);
-		red_ghost.update(map,pacman,movement_mode);
-		pink_ghost.update(map,pacman,movement_mode);
-		blue_ghost.update(map,pacman,red_ghost.getPosition(),movement_mode);
-		orange_ghost.update(map,pacman,movement_mode);
-
-        draw_map(map,window);
-        
+		if (game_won)
+		{
+			// std::cout << "GAME WON 🎉🎉🎉🎉🎉🎉🎉"<<std::endl;
+			sf::Text text("GAME WON\nHit Enter to play again",font,16);
+			text.move(75.0f,168.0f);
+			text.setFillColor(sf::Color::White);
+			window.draw(text);
+		}
+		else if (pacman.get_dead())
+		{
+			std::cout << "GAME LOST 😵😵😵😵😵😵😵"<<std::endl;
+			sf::Text text("GAME OVER",font,16);
+			text.move(0.0f,0.0f);
+			window.draw(text);
+		}
+    
         window.display();
     }
     

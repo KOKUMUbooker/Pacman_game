@@ -5,7 +5,7 @@
 #include "headers/pacman.hpp"
 #include "headers/map-collision.hpp"
 
-Pacman::Pacman():dead{0}{}
+Pacman::Pacman():dead{0},current_sprite_frame_edge_x_axis{0},current_sprite_frame_top_distance{0}{}
 
 void Pacman::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
 {
@@ -44,6 +44,14 @@ void Pacman::set_position(short i_x,short i_y)
 unsigned char Pacman::getDirection()
 {
     return direction;
+}
+
+void Pacman::reset()
+{
+    direction = 0;
+    dead = 0;
+    current_sprite_frame_edge_x_axis = 0;
+    current_sprite_frame_top_distance = 0;
 }
 
 void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, MovementMode &cur_movement_mode)
