@@ -130,7 +130,7 @@ int main(){
 		if(!game_won && pacman.get_dead() == 0)
 		{
 			// Timer to determine when to switch movement mode
-			if(game_play_time.getElapsedTime().asSeconds() > 7.0f && movement_mode != MovementMode::Chase_mode){
+			if(game_play_time.getElapsedTime().asSeconds() > 7.0f && movement_mode != MovementMode::Chase_mode && movement_mode != MovementMode::Frightened_mode){
 				movement_mode = MovementMode::Chase_mode;
 				std::cout<<"Switching to chase Mode"<< std::endl;
 			}

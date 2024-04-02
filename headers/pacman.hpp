@@ -11,6 +11,7 @@ class Pacman
     short current_sprite_frame_top_distance = 0;
     short current_sprite_frame_edge_x_axis = 0;
     sf::Sprite pacman_sprite;
+    unsigned short energized_duration;
 
     public:
         Pacman();

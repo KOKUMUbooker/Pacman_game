@@ -5,7 +5,7 @@
 #include "headers/pacman.hpp"
 #include "headers/map-collision.hpp"
 
-Pacman::Pacman():dead{0},current_sprite_frame_edge_x_axis{0},current_sprite_frame_top_distance{0}{}
+Pacman::Pacman():dead{0},current_sprite_frame_edge_x_axis{0},current_sprite_frame_top_distance{0},energized_duration{0}{}
 
 void Pacman::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
 {
@@ -63,6 +63,17 @@ void Pacman::set_home(short i_x,short i_y)
 
 void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, MovementMode &cur_movement_mode)
 {
+    if(energized_duration > 0 && cur_movement_mode == MovementMode::Frightened_mode)
+    {
+        energized_duration --;
+    }
+    else if(energized_duration == 0 && cur_movement_mode == MovementMode::Frightened_mode)
+    {
+        energized_duration = 0;
+        cur_movement_mode = MovementMode::Chase_mode;
+        std::cout<< "Going back to Chase mode 👿👿👿👿👿👿👿👿" <<std::endl;
+    }
+
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
 	std::array<bool, 4> walls{};
 	walls[0] = map_collision(0, 0, PACMAN_SPEED + position.x, position.y, i_map);
@@ -142,10 +153,12 @@ void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, 
         position.x = PACMAN_SPEED - CELL_SIZE;
 	}
 
-    // map_collision returns 1 if energizer is eaten
+    // map_collision returns 1 if energizer is eaten & i_collect_pellets is set to 1
     if(map_collision(1, 0, position.x, position.y, i_map))
     {
-
+        cur_movement_mode = MovementMode::Frightened_mode;
+        energized_duration = PACMAN_ENERGIZED_DURATION;
+        std::cout<< "Changing mode to FRIGHTENED MODE 😖😖😖😖😖😖😖" <<std::endl;
     }
 }
 

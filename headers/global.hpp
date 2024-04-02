@@ -26,6 +26,8 @@ constexpr short PACMAN_DOWN_FRAME_END {48};
 constexpr short PACMAN_LEFT_FRAME_END {32};
 constexpr short PACMAN_RIGHT_FRAME_END {0};
 
+constexpr unsigned short PACMAN_ENERGIZED_DURATION {512};
+
 enum Cell
 {
 	Door=1,
