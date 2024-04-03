@@ -19,7 +19,7 @@ int main(){
 	std::array<Position, 4> ghost_positions;
 
 	sf::Font font;
-	font.loadFromFile("./assets/fonts/Adventuring.ttf");
+	font.loadFromFile("./assets/fonts/Pixel NES.otf");
 
 	// Ghosts
 	RedGhost red_ghost;
@@ -205,9 +205,15 @@ int main(){
 		else if (pacman.get_dead())
 		{
 			// std::cout << "GAME LOST 😵😵😵😵😵😵😵"<<std::endl;
-			sf::Text text("GAME OVER\nHit Enter to play again",font,16);
+			sf::Texture texture;
+    		texture.loadFromFile("./assets/game-over.png");
+			sf::Sprite sprite(texture);
+			sprite.setPosition(40.0f,(CELL_SIZE * MAP_HEIGHT) / 5); 
+			window.draw(sprite);
+			
+			sf::Text text("Hit Enter to play again",font,12);
 			text.setFillColor(sf::Color::Red);
-			text.move(75.0f,170.0f);
+			text.move(CELL_SIZE * 5,(CELL_SIZE * MAP_HEIGHT) / 1.35);
 			window.draw(text);
 		}
     
