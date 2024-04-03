@@ -12,6 +12,7 @@ class Pacman
     short current_sprite_frame_edge_x_axis = 0;
     sf::Sprite pacman_sprite;
     unsigned short energized_duration;
+    unsigned short lives;
 
     public:
         Pacman();
@@ -24,5 +25,7 @@ class Pacman
         Position getPosition();
         unsigned char getDirection();
         bool get_dead();
+        unsigned short get_lives();
+        void reduce_life();
         sf::Sprite get_pacman_sprite();
 };

@@ -108,7 +108,7 @@ int main(){
 				{
 					if(event.key.code == sf::Keyboard::Enter && (game_won || pacman.get_dead()))
 					{
-						std::cout << "Trying to reset game 🔁🔁🔁🔁🔁🔁🔁🔁"<<std::endl;
+						std::cout << "Resetting the game 🔁🔁🔁🔁🔁🔁🔁🔁"<<std::endl;
 						// Reset the game
 						movement_mode = MovementMode::Scatter_mode;
 						game_won = 0;
@@ -156,6 +156,23 @@ int main(){
 
 			if(!game_won)
 			{
+				sf::Text text("LIVES : ",font,10);
+				text.move(CELL_SIZE,BOTTOM_SCREEN_Y_AXIS);
+				text.setFillColor(sf::Color::Red);
+				window.draw(text);
+
+				sf::Texture texture;
+    			texture.loadFromFile("./assets/heart.png");
+				float initial_x_position = 54.0f; 
+				for (short i = 1; i <= pacman.get_lives() ; i ++)
+				{
+					sf::Sprite sprite(texture);
+					sprite.setScale(0.025f,0.025f);
+					if(i > 1) initial_x_position = initial_x_position + CELL_SIZE;
+					sprite.setPosition(initial_x_position,BOTTOM_SCREEN_Y_AXIS); 
+					window.draw(sprite);
+				}
+
 				pacman.draw(window,pacman_animation_clock);
 				red_ghost.draw(window,red_animation_clock,movement_mode);
 				pink_ghost.draw(window,pink_animation_clock,movement_mode);
@@ -176,7 +193,7 @@ int main(){
 			// std::cout << "GAME WON 🎉🎉🎉🎉🎉🎉🎉"<<std::endl;
 			sf::Text text("GAME WON\nHit Enter to play again",font,16);
 			text.move(75.0f,168.0f);
-			text.setFillColor(sf::Color::White);
+			text.setFillColor(sf::Color::Yellow);
 			window.draw(text);
 		}
 		else if (pacman.get_dead())

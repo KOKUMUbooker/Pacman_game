@@ -5,7 +5,7 @@
 #include "headers/pacman.hpp"
 #include "headers/map-collision.hpp"
 
-Pacman::Pacman():dead{0},current_sprite_frame_edge_x_axis{0},current_sprite_frame_top_distance{0},energized_duration{0}{}
+Pacman::Pacman():dead{0},current_sprite_frame_edge_x_axis{0},current_sprite_frame_top_distance{0},energized_duration{0},lives{3}{}
 
 void Pacman::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
 {
@@ -50,6 +50,7 @@ unsigned char Pacman::getDirection()
 void Pacman::reset()
 {
     direction = 0;
+    lives = 3;
     dead = 0;
     current_sprite_frame_edge_x_axis = 0;
     current_sprite_frame_top_distance = 0;
@@ -180,4 +181,23 @@ void Pacman::set_dead(bool is_dead)
 sf::Sprite Pacman::get_pacman_sprite()
 {
     return pacman_sprite;
+}
+
+unsigned short Pacman::get_lives()
+{
+    return lives;
+}
+
+void Pacman::reduce_life()
+{
+    if(lives > 0)
+    {
+        lives --;
+        position = home ;
+    }
+    if(lives == 0)
+    {
+        dead = 0;
+        direction = Direction::Right;
+    }
 }

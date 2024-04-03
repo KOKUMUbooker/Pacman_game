@@ -71,7 +71,7 @@ void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
         }
         else
         {
-            i_pacman.set_dead(1);
+            i_pacman.reduce_life();
         }
     }
 

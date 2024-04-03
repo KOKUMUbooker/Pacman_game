@@ -70,7 +70,7 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
         }
         else
         {
-            i_pacman.set_dead(1);
+            i_pacman.reduce_life();
         }
     }
 

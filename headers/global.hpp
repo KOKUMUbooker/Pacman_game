@@ -32,6 +32,8 @@ constexpr short PACMAN_DOWN_FRAME_END {48};
 constexpr short PACMAN_LEFT_FRAME_END {32};
 constexpr short PACMAN_RIGHT_FRAME_END {0};
 
+constexpr float BOTTOM_SCREEN_Y_AXIS {336.0f};
+
 constexpr unsigned short PACMAN_ENERGIZED_DURATION {512};
 
 enum Cell
