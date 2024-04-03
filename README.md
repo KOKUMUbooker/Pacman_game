@@ -77,6 +77,7 @@ Occurs automatically after the 7 seconds of the scatter mode have elapsed.
 • Upon arriving at a junction (map regions with more than 1 pathway), the player can switch Pac-Man's current direction by hitting a different arrow key.
 
 Pac-Man's control scheme is as follows:
+
 • Up arrow key: move up
 
 • Down arrow key: move downwards
@@ -119,6 +120,7 @@ _Character and nicknames of the ghosts in English and Japanese._
 
 - The red ghost starts outside of the ghost house and is usually the first one to be seen as a threat, as he makes a beeline for Pac-Man almost immediately.
 - In Chase mode, the red ghost’s target tile is defined as Pac-Man's current tile, ensuring that it follows directly behind Pac-Man.
+
   ![Red Ghost Targeting](./readme_assets/red-ghost-targeting.png)
 
 ### ii) The Pink Ghost
@@ -126,6 +128,7 @@ _Character and nicknames of the ghosts in English and Japanese._
 - The pink ghost starts inside the ghost house but always exits immediately.
 - His targeting scheme attempts to move him to the place where Pac-Man is going, instead of where he currently is.
 - In Chase mode, the pink ghost’s target tile is determined by looking at Pac-Man's current position and orientation, selecting the location four tiles straight ahead of Pac-Man.
+
   ![Pink Ghost Targeting](./readme_assets/pink-ghost-targeting.png)
 
 ### iii) The Blue Ghost
@@ -134,15 +137,19 @@ _Character and nicknames of the ghosts in English and Japanese._
 - To locate the blue ghost’s target, we start by selecting the position two tiles in front of Pac-Man, similar to the pink ghost’s targeting method.
 - Then, we imagine drawing a vector from the red ghost’s position to this tile and double the length of the vector.
 - The tile that this new, extended vector ends on will be the blue ghost’s actual target.
+
   ![Blue Ghost Targeting](./readme_assets/blue-ghost-targeting.png)
 
 ### iv) The Orange Ghost
 
 - The orange ghost’s targeting has two separate modes based on his proximity to Pac-Man.
 - If he is farther away, his targeting is identical to the red ghost, using Pac-Man's current tile as his target.
+
   ![Orange Ghost Targeting 1](./readme_assets/orange-ghost-targeting1.png)
+
 - However, if his distance to Pac-Man becomes less than eight tiles, the orange ghost’s target is set to the same tile as his fixed one in Scatter mode, just outside the bottom-left corner of the maze.
 - This method alternates between coming directly towards Pac-Man and heading back to his corner whenever he gets too close.
+
   ![Orange Ghost Targeting 2](./readme_assets/orange-ghost-targeting2.png)
 
 ## Code Implementation for Game Play Mechanics
@@ -150,7 +157,7 @@ _Character and nicknames of the ghosts in English and Japanese._
 ### i) Pacman and Ghost Collision
 
 - Implemented using circle collision detection.
-- Involves having a circle surround the sprites (file images of the various characters) of the two entities.
+- Involves having a circle surround the sprites (png images of the various characters) of the two entities.
 - Calculates the Euclidean distance between the two entities.
 - Collision is detected if the distance between the two sprites is less than the sum of the two circle radii.
 
