@@ -169,3 +169,45 @@ void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direc
     
     available_paths.clear();    
 }
+
+void set_random_direction(std::array<bool, 4> &walls, unsigned char &user_direction ,unsigned char distance_offset )
+{
+    unsigned char available_ways {0}; 
+    unsigned char inaccessibleRoute = (user_direction + 2) % 4;
+
+    // Get the number of available paths based on the current position
+     for(unsigned char a = 0; a < 4; a++)
+     {
+        if(a == inaccessibleRoute)
+        {
+            continue;
+        }
+        else if(!walls[a])
+        {
+            available_ways ++;
+        }
+     }
+
+    // If there's a junction with multiple pathways, set a random direction
+     if(available_ways > 1)
+     {
+        unsigned char new_direction = rand() % 4 ;
+        
+        if(!walls[new_direction])
+        {
+            user_direction = new_direction;
+        }
+     }
+     // If there's still a wall in the chosen path do a checkup and set a direction with no walls
+     else if(walls[user_direction])
+     {
+        for(unsigned char a = 0; a < 4; a++)
+        {
+            if(!walls[a] && a != inaccessibleRoute)
+            {
+                user_direction = a;
+                break;
+            }
+        }
+     }
+}

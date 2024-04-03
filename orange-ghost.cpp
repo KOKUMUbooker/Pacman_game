@@ -8,7 +8,7 @@
 #include "headers/map-collision.hpp"
 #include "headers/orange-ghost.hpp"
 
-OrangeGhost::OrangeGhost():use_door{1},direction{2} {}
+OrangeGhost::OrangeGhost():use_door{1},direction{2},frightened_move_lag{GHOST_FRIGHTENED_MOVE_LAG} {}
 
 void OrangeGhost::draw(sf::RenderWindow &i_window,sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
 {
@@ -109,9 +109,33 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
         }
     }
 
-    set_optimal_direction(walls, direction, GHOST_SPEED ,position ,target);
+    // Setting direction based on current movement mode
+    if(cur_movement_mode == MovementMode::Frightened_mode)
+    {
+        set_random_direction(walls,direction,GHOST_SPEED);
+    }
+    else
+    {
+        set_optimal_direction(walls, direction, GHOST_SPEED ,position ,target);
+    }
+
+    // If in frightened mode move ghost only after some amount of frames
+    if(frightened_move_lag > 0 && cur_movement_mode == MovementMode::Frightened_mode)
+    {
+        frightened_move_lag --;
+        move = 0;
+    }
+    else if(frightened_move_lag == 0 && cur_movement_mode == MovementMode::Frightened_mode)
+    {
+        frightened_move_lag = GHOST_FRIGHTENED_MOVE_LAG;
+        move = 1;
+    }
+    else
+    {
+        move = 1;
+    }
     
-    if(!walls[direction])
+    if(!walls[direction] && move)
     {
         switch (direction)
         {

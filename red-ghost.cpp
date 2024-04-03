@@ -8,7 +8,7 @@
 #include "headers/red-ghost.hpp"
 #include "headers/map-collision.hpp"
 
-RedGhost::RedGhost():direction{0},use_door{0},current_sprite_frame_edge{0}{}
+RedGhost::RedGhost():direction{0},use_door{0},current_sprite_frame_edge{0},frightened_move_lag{GHOST_FRIGHTENED_MOVE_LAG}{}
 
 void RedGhost::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
 {
@@ -73,6 +73,7 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
 	walls[2] = map_collision(0, 0, position.x - GHOST_SPEED, position.y, i_map);
 	walls[3] = map_collision(0, 0, position.x, GHOST_SPEED + position.y, i_map);
 
+    // Setting target based on current movement mode
     if(cur_movement_mode == MovementMode::Chase_mode)
     {
         target = i_pacman.getPosition();
@@ -81,10 +82,34 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
     {
         target = RED_GHOST_SCATTER_TARGET;
     }
-    // Set the optimal path based on accessible direction
-    set_optimal_direction(walls, direction , GHOST_SPEED ,position, target);
 
-    if(!walls[direction])
+    // Setting direction based on current movement mode
+    if(cur_movement_mode == MovementMode::Frightened_mode)
+    {
+        set_random_direction(walls,direction,GHOST_SPEED);
+    }
+    else
+    {
+        set_optimal_direction(walls, direction , GHOST_SPEED ,position, target);
+    }
+    
+    // If in frightened mode move ghost only after some amount of frames
+    if(frightened_move_lag > 0 && cur_movement_mode == MovementMode::Frightened_mode)
+    {
+        frightened_move_lag --;
+        move = 0;
+    }
+    else if(frightened_move_lag == 0 && cur_movement_mode == MovementMode::Frightened_mode)
+    {
+        frightened_move_lag = GHOST_FRIGHTENED_MOVE_LAG;
+        move = 1;
+    }
+    else
+    {
+        move = 1;
+    }
+
+    if(!walls[direction] && move)
     {
         switch (direction)
         {

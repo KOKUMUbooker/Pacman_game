@@ -22,3 +22,4 @@ double get_angle_between_perpendicular_height_and_vector( Position &vector_start
 
 Position get_unknown_coordinate(const Position &known_position, double distance ,double angle_in_radians);
 
+void set_random_direction(std::array<bool, 4> &walls, unsigned char &user_direction ,unsigned char distance_offset );

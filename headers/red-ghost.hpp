@@ -12,6 +12,8 @@ class RedGhost
     bool use_door;
     short current_sprite_frame_edge;
     sf::Sprite ghost_sprite;
+    unsigned short frightened_move_lag;
+    bool move;
 
     public:
         RedGhost();

@@ -13,6 +13,8 @@ class OrangeGhost
     Position home;
     sf::Sprite ghost_sprite;
     short current_sprite_frame_edge = 0;
+    unsigned short frightened_move_lag;
+    bool move;
 
     public:
         OrangeGhost();
