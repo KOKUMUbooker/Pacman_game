@@ -163,7 +163,7 @@ int main(){
 				window.draw(text);
 
 				sf::Text text2("GHOST MODE : " + get_ghost_mode(movement_mode) ,font,10);
-				text2.move( CELL_SIZE * 11 ,BOTTOM_SCREEN_Y_AXIS + 2.0f);
+				text2.move( CELL_SIZE * 10 ,BOTTOM_SCREEN_Y_AXIS + 2.0f);
 				text2.setFillColor(sf::Color::Yellow);
 				window.draw(text2);
 
