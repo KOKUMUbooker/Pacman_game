@@ -6,11 +6,15 @@ To compile the project, ensure you have `g++` and the SFML library installed on 
 
 Compile the project using the following command:
 
-g++ \*.cpp -lsfml-graphics -lsfml-window -lsfml-system -o pacman
+```bash
+g++ *.cpp -lsfml-graphics -lsfml-window -lsfml-system -o pacman
+```
 
 To run it, execute the `pacman` file:
 
+```bash
 ./pacman
+```
 
 ## Demo Samples
 
@@ -45,6 +49,7 @@ Default starting mode for all ghosts whereby they target their respective corner
 • However, the game's configuration limits the mode to the first 7 seconds of the game which later on switches to chase mode unless interrupted by Pac-Man eating an energizer causing a switch to frightened mode.
 
 ![Ghosts Scatter Mode](./readme_assets/ghosts-scatter-mode.png)
+
 _Each ghost's target tile and eventual looping path, color-coded to match their own color._
 
 ### ii) Frightened Mode
@@ -104,8 +109,41 @@ Pac-Man's control scheme is as follows:
 
 The only differences between the ghosts are their methods of selecting target tiles in Chase and Scatter modes.
 
-![Ghost Personalities](./readme_assets/ghost-personalities.png)
+![Ghost Personalities](./readme_assets/ghost-pesonalities.png)
+
 _Character and nicknames of the ghosts in English and Japanese._
+
+## Ghost Targeting Strategies
+
+### i) The Red Ghost
+
+- The red ghost starts outside of the ghost house and is usually the first one to be seen as a threat, as he makes a beeline for Pac-Man almost immediately.
+- In Chase mode, the red ghost’s target tile is defined as Pac-Man's current tile, ensuring that it follows directly behind Pac-Man.
+  ![Red Ghost Targeting](./readme_assets/red-ghost-targeting.png)
+
+### ii) The Pink Ghost
+
+- The pink ghost starts inside the ghost house but always exits immediately.
+- His targeting scheme attempts to move him to the place where Pac-Man is going, instead of where he currently is.
+- In Chase mode, the pink ghost’s target tile is determined by looking at Pac-Man's current position and orientation, selecting the location four tiles straight ahead of Pac-Man.
+  ![Pink Ghost Targeting](./readme_assets/pink-ghost-targeting.png)
+
+### iii) The Blue Ghost
+
+- The blue ghost is difficult to predict as he uses both Pac-Man's position/facing and the red ghost's position in his calculation.
+- To locate the blue ghost’s target, we start by selecting the position two tiles in front of Pac-Man, similar to the pink ghost’s targeting method.
+- Then, we imagine drawing a vector from the red ghost’s position to this tile and double the length of the vector.
+- The tile that this new, extended vector ends on will be the blue ghost’s actual target.
+  ![Blue Ghost Targeting](./readme_assets/blue-ghost-targeting.png)
+
+### iv) The Orange Ghost
+
+- The orange ghost’s targeting has two separate modes based on his proximity to Pac-Man.
+- If he is farther away, his targeting is identical to the red ghost, using Pac-Man's current tile as his target.
+  ![Orange Ghost Targeting 1](./readme_assets/orange-ghost-targeting1.png)
+- However, if his distance to Pac-Man becomes less than eight tiles, the orange ghost’s target is set to the same tile as his fixed one in Scatter mode, just outside the bottom-left corner of the maze.
+- This method alternates between coming directly towards Pac-Man and heading back to his corner whenever he gets too close.
+  ![Orange Ghost Targeting 2](./readme_assets/orange-ghost-targeting2.png)
 
 ## Code Implementation for Game Play Mechanics
 
