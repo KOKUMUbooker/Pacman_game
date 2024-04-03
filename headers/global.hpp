@@ -7,6 +7,7 @@ constexpr unsigned char SCREEN_RESIZE {2};
 constexpr unsigned char FONT_HEIGHT {16};
 constexpr unsigned char PACMAN_SPEED {2};
 constexpr unsigned char GHOST_SPEED {1};
+constexpr unsigned char FRIGHTENED_GHOST_SPEED {4};
 //If the distance between the orange ghost and Pacman is less than this value, the orange ghost will go into the scatter mode.
 constexpr unsigned char GHOST_3_CHASE {4};
 constexpr short SPRITE_GAME_CHARACTER_WIDTH {24}; // Size of each frame in each of the ghost sprite sheets 
@@ -31,7 +32,7 @@ constexpr short PACMAN_DOWN_FRAME_END {48};
 constexpr short PACMAN_LEFT_FRAME_END {32};
 constexpr short PACMAN_RIGHT_FRAME_END {0};
 
-constexpr unsigned short PACMAN_ENERGIZED_DURATION {1024};
+constexpr unsigned short PACMAN_ENERGIZED_DURATION {512};
 
 enum Cell
 {

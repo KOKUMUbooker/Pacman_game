@@ -129,7 +129,7 @@ void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
         Position two_tiles_ahead_pacman = new_target;
 
         // 2) Create a vector to this new_target from the red_ghost and double it
-        short doubleDistanceApart = getDistApart(two_tiles_ahead_pacman,AvailablePositions {i_red_ghost_position.x,i_red_ghost_position.y}) * 2;
+        short doubleDistanceApart = get_euclidean_distance(two_tiles_ahead_pacman,AvailablePositions {i_red_ghost_position.x,i_red_ghost_position.y}) * 2;
 
         // 3) Retrieve coordinate of where it lands which will be the new target 
                // i) Get angle between vector and perpendicular height

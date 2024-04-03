@@ -98,14 +98,15 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
         }
         else if(cur_movement_mode == MovementMode::Chase_mode)
         {
-            //The orange ghost will chase Pacman until it gets close to him. Then it'll switch to the scatter mode.
-            if (CELL_SIZE * GHOST_3_CHASE <= sqrt(pow(position.x - i_pacman.getPosition().x, 2) + pow(position.y - i_pacman.getPosition().y, 2)))
+            short distance_to_target = get_manhattan_distance(position,i_pacman.getPosition());
+            //The orange ghost will chase Pacman until it gets near pacman by 8 cells. Then it'll switch to the scatter mode.
+            if (distance_to_target > CELL_SIZE * 8)
             {
                 target = i_pacman.getPosition();
             }
             else
             {
-                target = {0, CELL_SIZE * (MAP_HEIGHT - 1)};
+                target = ORANGE_GHOST_SCATTER_TARGET;
             }
         }
     }

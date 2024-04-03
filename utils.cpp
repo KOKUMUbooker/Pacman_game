@@ -8,14 +8,21 @@
 #include "headers/utils.hpp"
 #include "headers/map-collision.hpp"
 
-short getDistApart(Position target,AvailablePositions current){
+short get_euclidean_distance(Position target,AvailablePositions current){
     short x = current.x - target.x;
     short y = current.y - target.y;
 
     return std::sqrt((std::pow(x,2)+std::pow(y,2)));
 }
 
-std::string getStringDirection(unsigned char direction)
+short get_manhattan_distance(Position user_position,Position target_position){
+    short x = std::abs(target_position.x - user_position.x);
+    short y = std::abs(target_position.y - user_position.y);
+
+    return x + y;
+}
+
+std::string get_string_direction(unsigned char direction)
 {
     // 0 = Right, 1 = Up, 2 = left, 3 = Down
     if(direction == 0) { return "Right";}
@@ -25,14 +32,14 @@ std::string getStringDirection(unsigned char direction)
     else return "";
 }
 
-Position getMapCoordinatesInGrid(Position position){
+Position get_map_coordinates_in_grid(Position position){
     short cell_x = ceil(position.x / CELL_SIZE);
     short cell_y = ceil(position.y / CELL_SIZE);
 
     return Position {static_cast<short>(cell_x * 16), static_cast<short>(cell_y *16)};
 }
 
-double convertDegreesToRadians(double degrees) {
+double convert_degrees_to_radians(double degrees) {
   return degrees * M_PI / 180.0;
 }
 
@@ -103,28 +110,28 @@ void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direc
                 case 0:
                 {
                     AvailablePositions position0{static_cast<short>(distance_offset + user_position.x),user_position.y};
-                    position0.targetDist = getDistApart(target_position,position0);
+                    position0.targetDist = get_euclidean_distance(target_position,position0);
                     available_paths.insert({0,position0});
                     break;
                 }
                 case 1:
                 {
                     AvailablePositions position1{user_position.x, static_cast<short>(user_position.y - distance_offset)};
-                    position1.targetDist = getDistApart(target_position,position1);
+                    position1.targetDist = get_euclidean_distance(target_position,position1);
                     available_paths.insert({1,position1});
                     break;
                 }
                 case 2:
                 {
                     AvailablePositions position2{static_cast<short>(user_position.x - distance_offset), user_position.y};
-                    position2.targetDist = getDistApart(target_position,position2);
+                    position2.targetDist = get_euclidean_distance(target_position,position2);
                     available_paths.insert({2,position2});
                     break;
                 }
                 case 3:
                 {
                     AvailablePositions position3{user_position.x, static_cast<short>(distance_offset + user_position.y)};
-                    position3.targetDist = getDistApart(target_position,position3);
+                    position3.targetDist = get_euclidean_distance(target_position,position3);
                     available_paths.insert({3,position3});
                     break;
                 }
