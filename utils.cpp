@@ -166,18 +166,24 @@ void set_optimal_direction(std::array<bool, 4> &walls, unsigned char &user_direc
                 user_direction = minKey;
             }
     }
-    // If there's still a wall in the current direction check all directions to find one without a wall
-    else if(walls[user_direction])
+    else
     {
-         for(unsigned char a = 0; a < 4; a++)
-         {
-             if(!walls[a] && a != (user_direction + 2) % 4)
-             {
-                 user_direction = a;
+        if(available_paths.size()== 1)
+        {
+            user_direction = available_paths.begin()->first;
+        }
+        else{
+           for(unsigned char a = 0; a < 4; a++)
+            {
+                if(!walls[a] && a != (user_direction + 2) % 4)
+                {
+                    user_direction = a;
 
-                break;
-             }
-         }
+                    break;
+                }
+            } 
+        }
+
     }
     // std::cout<<"Final user_direction in set_optimal_direction fn : "<<std::to_string(user_direction)<<std::endl;
     
