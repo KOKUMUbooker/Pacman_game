@@ -158,49 +158,51 @@ _Character and nicknames of the ghosts in English and Japanese._
 
 - Implemented using circle collision detection.
 - Involves having a circle surround the sprites (png images of the various characters) of the two entities.
-- Calculates the Euclidean distance between the two entities.
+- Calculate the Euclidean distance between the two entities.
 - Collision is detected if the distance between the two sprites is less than the sum of the two circle radii.
 
 ### ii) Setting Optimal Direction before Movement
 
 - Implemented using a greedy search algorithm:
-  - Checks immediate surroundings for walls in all four directions.
-  - Keeps track of the Euclidean distance from each unblocked cell to the target in a map in key-value pairs.
-  - If there are multiple accessible paths, selects the direction with the lowest Euclidean distance.
-  - If only one path is accessible, sets the direction as the value of the key of the first element in the map.
-  - Clears elements of the map after setting the optimal direction.
+  - Check immediate surroundings for walls in all four directions.
+  - Keep track of the Euclidean distance from each unblocked cell to the target in a map in key-value pairs.
+  - If there are multiple accessible paths, select the direction with the lowest Euclidean distance.
+  - If only one path is accessible, set the direction as the value of the key of the first element in the map.
+  - Clear elements of the map after setting the optimal direction.
 
 ### iii) Animations
 
 - Implemented using sprite sheet PNGs containing multiple images.
-- Displays specific sections of the PNG image based on time intervals.
+- Display specific sections of the PNG image based on time intervals.
 - The cycle of image portions starts from a specific point, goes up to a designated end, and then returns to the origin.
 
 ### iv) Chase Mode for the Red Ghost
 
-- Sets the red ghost's target as Pacman's position.
-- Gets the optimal direction using Pacman as the target.
-- Increments the ghost's x or y position accordingly.
+- Set the red ghost's target as Pacman's position.
+- Get the optimal direction using Pacman as the target.
+- With the optimal direction, increment the ghost's x or y position by some specified value
 
 ### v) Chase Mode for the Pink Ghost
 
-- Calculates four tiles in Pacman's direction to get the pink ghost's target.
-- Sets the optimal direction using this new target and increments the ghost's x or y position.
+- Calculate four tiles in Pacman's direction to get the pink ghost's target.
+- Set the optimal direction using this new target and increment the ghost's x or y position.
 
 ### vi) Chase Mode for the Blue Ghost
 
-- Calculates two tiles in Pacman's direction to get the red ghost's initial target.
-- Calculates the Euclidean distance between the red ghost and the initial target (two tiles ahead of Pacman).
-- Doubles this distance to get the blue ghost's target.
-  - Calculates the angle between this vector and the x-axis using the red ghost and the initial target coordinates.
-  - Computes dy and dx based on the angle and offset the red ghost's coordinates to get the vector's end coordinates.
-- Sets the optimal direction using this new target and increments the ghost's x or y position.
+- Get pacman's position and direction and calculate 2 tiles in pacman's direction to get the red ghost's initial target.
+- Get the red ghost's position and calculate the euclidean distance between the red ghost and the initial target(2 tiles ahead of pacman).
+- Double this distance
+- The end point of this vector is the blue ghost's target
+- Obtaining blue ghost's target(coordinates at the vector's end) involved :
+  - Get angle between this vector and the x-axis using the red ghost and the initial target coordinates (Angle is obtained by getting dy and dx then using SOHCAHTOA)
+  - Now with the angle between x-axis and the vector distance, we can compute dy and dx and with the red ghosts coordinates we can offset it using dy and dx to get the vector's end coordinates.
+- Set the optimal direction using this new target and increment the ghost's x or y position by some specified value.
 
 ### vii) Chase Mode for the Orange Ghost
 
-- Calculates the Manhattan distance from the orange ghost to Pacman.
-- If the distance is greater than eight cells, uses the red ghost's targeting approach; otherwise, targets its corner from the scatter mode.
-- Sets the optimal direction and increments the ghost's x or y position accordingly.
+- Get the manhattan distance(sum of absolute values of dy and dx for 2 coordinates) from the orange ghost to pacman.
+- If the distance is greater than eight cells, use the red ghost's targeting approach; otherwise, target its corner from the scatter mode.
+- Set the optimal direction using this new target and increment the ghost's x or y position by some specified value.
 
 ## Technologies Used
 
