@@ -20,6 +20,8 @@ Position get_map_coordinates_in_grid(Position Position);
 
 std::string get_string_direction(unsigned char direction);
 
+std::string get_ghost_mode(MovementMode ghost_mode);
+
 double get_angle_between_perpendicular_height_and_vector( Position &vector_start, Position &vector_end);
 
 Position get_unknown_coordinate(const Position &known_position, double distance ,double angle_in_radians);

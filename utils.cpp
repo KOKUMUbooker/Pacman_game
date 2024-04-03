@@ -32,6 +32,13 @@ std::string get_string_direction(unsigned char direction)
     else return "";
 }
 
+std::string get_ghost_mode(MovementMode ghost_mode)
+{
+    if(ghost_mode == MovementMode::Chase_mode) {return "CHASE";}
+    else if(ghost_mode == MovementMode::Frightened_mode) {return "FRIGHTENED";}
+    else {return "SCATTER";}
+}
+
 Position get_map_coordinates_in_grid(Position position){
     short cell_x = ceil(position.x / CELL_SIZE);
     short cell_y = ceil(position.y / CELL_SIZE);

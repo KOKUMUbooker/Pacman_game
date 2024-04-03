@@ -10,6 +10,7 @@
 #include "headers/pink-ghost.hpp"
 #include "headers/blue-ghost.hpp"
 #include "headers/orange-ghost.hpp"
+#include "headers/utils.hpp"
 
 int main(){
     Pacman pacman;
@@ -157,9 +158,14 @@ int main(){
 			if(!game_won)
 			{
 				sf::Text text("LIVES : ",font,10);
-				text.move(CELL_SIZE,BOTTOM_SCREEN_Y_AXIS);
+				text.move(CELL_SIZE,BOTTOM_SCREEN_Y_AXIS + 2.0f);
 				text.setFillColor(sf::Color::Red);
 				window.draw(text);
+
+				sf::Text text2("GHOST MODE : " + get_ghost_mode(movement_mode) ,font,10);
+				text2.move( CELL_SIZE * 11 ,BOTTOM_SCREEN_Y_AXIS + 2.0f);
+				text2.setFillColor(sf::Color::Yellow);
+				window.draw(text2);
 
 				sf::Texture texture;
     			texture.loadFromFile("./assets/heart.png");
@@ -169,7 +175,7 @@ int main(){
 					sf::Sprite sprite(texture);
 					sprite.setScale(0.025f,0.025f);
 					if(i > 1) initial_x_position = initial_x_position + CELL_SIZE;
-					sprite.setPosition(initial_x_position,BOTTOM_SCREEN_Y_AXIS); 
+					sprite.setPosition(initial_x_position,BOTTOM_SCREEN_Y_AXIS + 2.0f); 
 					window.draw(sprite);
 				}
 
