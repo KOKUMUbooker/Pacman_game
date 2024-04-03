@@ -24,7 +24,7 @@ constexpr short GHOST_RIGHT_FRAME_END {24};
 
 constexpr short GHOST_FRIGHTENED_FRAME_END {240};
 constexpr short GHOST_FRIGHTENED_FRAME_START {192};
-constexpr short GHOST_FRIGHTENED_MOVE_LAG {4};
+constexpr short GHOST_FRIGHTENED_MOVE_LAG {3};
 
 // Frame height level limits for pacman sprite based on direction
 constexpr short PACMAN_UP_FRAME_END {16};

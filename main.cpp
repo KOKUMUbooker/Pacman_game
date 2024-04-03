@@ -157,7 +157,7 @@ int main(){
 
 			if(!game_won)
 			{
-				sf::Text text("LIVES : ",font,10);
+				sf::Text text("LIVES ",font,10);
 				text.move(CELL_SIZE,BOTTOM_SCREEN_Y_AXIS + 2.0f);
 				text.setFillColor(sf::Color::Red);
 				window.draw(text);
@@ -213,7 +213,7 @@ int main(){
 			
 			sf::Text text("Hit Enter to play again",font,12);
 			text.setFillColor(sf::Color::Red);
-			text.move(CELL_SIZE * 5,(CELL_SIZE * MAP_HEIGHT) / 1.35);
+			text.move(CELL_SIZE * 4,(CELL_SIZE * MAP_HEIGHT) / 1.35);
 			window.draw(text);
 		}
     
