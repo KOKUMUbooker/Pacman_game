@@ -94,8 +94,9 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
     {
         if(cur_movement_mode == MovementMode::Scatter_mode)
         {
-            target = oORANGE_GHOST_SCATTER_TARGET;
-        }else if(cur_movement_mode == MovementMode::Chase_mode)
+            target = ORANGE_GHOST_SCATTER_TARGET;
+        }
+        else if(cur_movement_mode == MovementMode::Chase_mode)
         {
             //The orange ghost will chase Pacman until it gets close to him. Then it'll switch to the scatter mode.
             if (CELL_SIZE * GHOST_3_CHASE <= sqrt(pow(position.x - i_pacman.getPosition().x, 2) + pow(position.y - i_pacman.getPosition().y, 2)))
@@ -112,7 +113,16 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
     // Setting direction based on current movement mode
     if(cur_movement_mode == MovementMode::Frightened_mode)
     {
-        set_random_direction(walls,direction,GHOST_SPEED);
+        // Allows ghost to get out of home if was sent back by pacman
+        Position pink_home = {static_cast<short>(home.x - CELL_SIZE), home.y};
+        if(position == home || position == pink_home)
+        {
+            set_optimal_direction(walls, direction, GHOST_SPEED,position ,home_exit);
+        }
+        else
+        {
+            set_random_direction(walls,direction,GHOST_SPEED);
+        }
     }
     else
     {

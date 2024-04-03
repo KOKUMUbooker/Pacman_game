@@ -68,8 +68,17 @@ enum MovementMode
 	Frightened_mode
 };
 
+// 0 = Right, 1 = Up, 2 = left, 3 = Down
+enum Direction
+{
+	Right,
+	Up,
+	Left,
+	Down
+};
+
 constexpr Position RED_GHOST_SCATTER_TARGET {CELL_SIZE * (MAP_WIDTH - 1), 0};
 constexpr Position PINK_GHOST_SCATTER_TARGET {0, 0};
 constexpr Position BLUE_GHOST_SCATTER_TARGET {CELL_SIZE * (MAP_WIDTH - 1), CELL_SIZE * (MAP_HEIGHT - 1)};
-constexpr Position oORANGE_GHOST_SCATTER_TARGET {0, CELL_SIZE * (MAP_HEIGHT - 1)};
+constexpr Position ORANGE_GHOST_SCATTER_TARGET {0, CELL_SIZE * (MAP_HEIGHT - 1)};
 

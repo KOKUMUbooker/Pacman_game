@@ -145,7 +145,15 @@ void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
     // Setting direction based on current movement mode
     if(cur_movement_mode == MovementMode::Frightened_mode)
     {
-        set_random_direction(walls,direction,GHOST_SPEED);
+        // Allows ghost to get out of home if was sent back by pacman
+        if(position == home)
+        {
+            set_optimal_direction(walls, direction, GHOST_SPEED,position ,home_exit);
+        }
+        else
+        {
+            set_random_direction(walls,direction,GHOST_SPEED);
+        }
     }
     else
     {
