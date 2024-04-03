@@ -194,10 +194,10 @@ void Pacman::reduce_life()
     {
         lives --;
         position = home ;
-    }
-    if(lives == 0)
-    {
-        dead = 0;
         direction = Direction::Right;
+    }
+    else if(lives == 0)
+    {
+        dead = 1;
     }
 }
