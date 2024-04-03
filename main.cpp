@@ -197,10 +197,14 @@ int main(){
 		else if (game_won)
 		{
 			// std::cout << "GAME WON 🎉🎉🎉🎉🎉🎉🎉"<<std::endl;
-			sf::Text text("GAME WON\nHit Enter to play again",font,16);
-			text.move(75.0f,168.0f);
+			sf::Text text("GAME WON",font,32);
+			sf::Text text2("Hit Enter to play again",font,16);
+			text.move(55.0f,168.0f);
+			text2.move(25.0f,200.0f);
 			text.setFillColor(sf::Color::Yellow);
+			text2.setFillColor(sf::Color::Yellow);
 			window.draw(text);
+			window.draw(text2);
 		}
 		else if (pacman.get_dead())
 		{
