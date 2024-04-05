@@ -30,13 +30,14 @@ To run it, execute the `pacman` file:
    <!-- ![Game lost screen](./readme_assets/game_over_screen.png) -->
    <img src="./readme_assets/game_over_screen.png" alt="drawing" width="50%" height="50%"/>
 
-## Game Play Mechanics
+## Gameplay Mechanics
 
-The gameplay is centered around Pac-Man consuming all pellets while avoiding pursuit by the ghosts. Each of the ghosts has 3 modes:
+The gameplay is centered around Pac-Man consuming all pellets while avoiding pursuit by the ghosts.
+Each of the ghosts has 3 modes:
 
 ### i) Scatter Mode
 
-Default starting mode for all ghosts whereby they target their respective corners within the game map.
+• Default starting mode for all ghosts whereby they target their respective corners within the game map.
 
 • The target corners are inaccessible and the ghosts cannot stop moving or reverse direction.
 
@@ -54,13 +55,13 @@ _Each ghost's target tile and eventual looping path, color-coded to match their 
 
 ### ii) Frightened Mode
 
-Occurs when Pac-Man consumes an energizer resulting in slow movement of the ghosts as well as switching color to dark blue.
+• Occurs when Pac-Man consumes an energizer resulting in slow movement of the ghosts as well as switching color to dark blue.
 
 • During this mode, Pac-Man can openly attack any of the ghosts without losing a life.
 
 ### iii) Chase Mode
 
-Occurs automatically after the 7 seconds of the scatter mode have elapsed.
+• Occurs automatically after the 7 seconds of the scatter mode have elapsed.
 
 • This causes the ghosts to target Pac-Man each in their unique way.
 

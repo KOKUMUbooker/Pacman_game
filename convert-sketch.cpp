@@ -70,7 +70,7 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::ar
 
 					break;
 				}
-				//Blue (cyan) ghost
+				//Blue  ghost
 				case '2':
 				{
 					i_ghost_positions[2].x = CELL_SIZE * b;

@@ -104,22 +104,22 @@ void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
             
             switch (i_pacman.getDirection())
             {
-                case 0: // Right
+                case Direction::Right: 
                 {
                     new_target.x += CELL_SIZE * 4;
                     break;
                 }
-                case 1: // Up
+                case Direction::Up: 
                 {
                     new_target.y += CELL_SIZE * 4;
                     break;
                 }
-                case 2:  // Left
+                case Direction::Left: 
                 {
                     new_target.x -= CELL_SIZE * 4;
                     break;
                 }
-                case 3:  // Down
+                case Direction::Down:  
                 {
                     new_target.y -= CELL_SIZE * 4;
                     break;
@@ -174,28 +174,28 @@ void PinkGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_ma
     {
         switch (direction)
         {
-            case 0:
+            case Direction::Right:
             {
                 current_sprite_frame_edge = GHOST_RIGHT_FRAME_END;
                 position.x += GHOST_SPEED;
                 
                 break;
             }
-            case 1:
+            case Direction::Up:
             {
                 current_sprite_frame_edge = GHOST_UP_FRAME_END;
                 position.y -= GHOST_SPEED;
 
                 break;
             }
-            case 2:
+            case Direction::Left:
             {
                 current_sprite_frame_edge = GHOST_LEFT_FRAME_END;
                 position.x -= GHOST_SPEED;
 
                 break;
             }
-            case 3:
+            case Direction::Down:
             {
                 current_sprite_frame_edge = GHOST_DOWN_FRAME_END;
                 position.y += GHOST_SPEED;

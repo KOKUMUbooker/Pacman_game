@@ -113,28 +113,28 @@ void RedGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map
     {
         switch (direction)
         {
-            case 0:
+            case Direction::Right:
             {
                 current_sprite_frame_edge = GHOST_RIGHT_FRAME_END;
                 position.x += GHOST_SPEED;
                 
                 break;
             }
-            case 1:
+            case Direction::Up:
             {
                 current_sprite_frame_edge = GHOST_UP_FRAME_END;
                 position.y -= GHOST_SPEED;
 
                 break;
             }
-            case 2:
+            case Direction::Left:
             {
                 current_sprite_frame_edge = GHOST_LEFT_FRAME_END;
                 position.x -= GHOST_SPEED;
 
                 break;
             }
-            case 3:
+            case Direction::Down:
             {
                 current_sprite_frame_edge = GHOST_DOWN_FRAME_END;
                 position.y += GHOST_SPEED;

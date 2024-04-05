@@ -22,28 +22,32 @@ bool map_collision(bool i_collect_pellets, bool i_use_door, short i_x, short i_y
 
 		switch (a)
 		{
-			case 0: //Top left cell
+			// case 0: 
+			case Direction::Right: 
 			{
 				x = static_cast<short>(floor(cell_x));
 				y = static_cast<short>(floor(cell_y));
 
 				break;
 			}
-			case 1: //Top right cell
+			// case 1: 
+			case Direction::Up: 
 			{
 				x = static_cast<short>(ceil(cell_x));
 				y = static_cast<short>(floor(cell_y));
 
 				break;
 			}
-			case 2: //Bottom left cell
+			// case 2: 
+			case Direction::Left: 
 			{
 				x = static_cast<short>(floor(cell_x));
 				y = static_cast<short>(ceil(cell_y));
 
 				break;
 			}
-			case 3: //Bottom right cell
+			// case 3: 
+			case Direction::Down: 
 			{
 				x = static_cast<short>(ceil(cell_x));
 				y = static_cast<short>(ceil(cell_y));
