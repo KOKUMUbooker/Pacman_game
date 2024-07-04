@@ -93,7 +93,7 @@ Pac-Man's control scheme is as follows:
 
 • The pink, blue, and orange ghosts will only return to this area if they are eaten by an energized Pac-Man (when mode = Frightened mode), or as a result of their positions being reset when Pac-Man dies.
 
-• The ghost house is otherwise inaccessible, and is not a valid area for Pac-Man or the ghosts to move into once.
+• The ghost house is otherwise inaccessible, and is not a valid area for Pac-Man or the ghosts to move into once they get out.
 
 ### 3. Target Tiles
 

@@ -8,6 +8,11 @@
 #include "headers/utils.hpp"
 #include "headers/map-collision.hpp"
 
+// Ensure M_PI is defined
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 short get_euclidean_distance(Position target,AvailablePositions current){
     short x = current.x - target.x;
     short y = current.y - target.y;
