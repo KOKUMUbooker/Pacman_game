@@ -1,46 +1,15 @@
-# Project Readme
-
-There are ready and testable executable files for both windows and linux ie `pacman.exe` and `pacman` respectively.
-
-If you wish to recompile the project choose either of these compilation steps based on your operating system.
+# Pac-man
 
 ## Compilation Instructions
 
-To compile the project, you can choose between two methods: the original Linux-specific method or a multi-platform method using CMake.
+To compile the project, you need to have [xmake](https://xmake.io/guide/quick-start.html) installed.
 
-#### Method 1: Linux-Specific Compilation
-
-1. Ensure you have `g++` and the SFML library installed on your system.
-2. Compile the project using the following command:
-
-   ```bash
-   g++ *.cpp -lsfml-graphics -lsfml-window -lsfml-system -o pacman
-   ```
-
-3. To run it, execute the `pacman` file:
-
-   ```bash
-   ./pacman
-   ```
-
-#### Method 2: Multi-Platform Compilation Using CMake
-
-1. Ensure you have CMake and the SFML library installed on your system.
-2. Execute the following commands in sequence to build the project:
-
-   ```bash
-   cmake -B build -DCMAKE_BUILD_TYPE=Release
-   cmake --build build --config Release
-   ```
-
-3. A new directory will be created /build and the executable can be found in /build/bin under either of these names "pacman.exe" or "pacman".
-
-4. [IMPORTANT] Move the executable in the root directory of the project so that the executable can fetch the png images from the assets directory.
-
-5. You can execute the executable from the terminal as :
-   ```bash
-   ./pacman
-   ```
+```bash
+rm -rf build
+xmake f -p linux -m release   # or whatever your native plat is
+xmake build
+xmake run
+```
 
 By following these steps, you can compile and run the project on multiple platforms.
 
