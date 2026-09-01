@@ -3,17 +3,18 @@
 #include <map>
 #include <iostream>
 
-#include "headers/global.hpp"
-#include "headers/utils.hpp"
-#include "headers/map-collision.hpp"
-#include "headers/pink-ghost.hpp"
+#include "global.hpp"
+#include "utils.hpp"
+#include "map-collision.hpp"
+#include "pink-ghost.hpp"
+#include "asset-path.hpp"
 
 PinkGhost::PinkGhost():use_door{1},direction{0},frightened_move_lag{GHOST_FRIGHTENED_MOVE_LAG} {}
 
 void PinkGhost::draw(sf::RenderWindow &i_window,sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
 {
     sf::Texture texture;
-    texture.loadFromFile("./assets/sprite_sheets/pink_ghost.png");
+    texture.loadFromFile(asset_path("./assets/sprite_sheets/pink_ghost.png"));
     if(cur_movement_mode == MovementMode::Frightened_mode)  current_sprite_frame_edge = GHOST_FRIGHTENED_FRAME_END ;
 
     sf::IntRect rectSourceSprite(current_sprite_frame_edge,0,24,24);  // width = 24 , height = 24  

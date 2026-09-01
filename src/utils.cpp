@@ -4,9 +4,9 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "headers/global.hpp"
-#include "headers/utils.hpp"
-#include "headers/map-collision.hpp"
+#include "global.hpp"
+#include "utils.hpp"
+#include "map-collision.hpp"
 
 // Ensure M_PI is defined
 #ifndef M_PI

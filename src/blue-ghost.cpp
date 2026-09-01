@@ -3,17 +3,19 @@
 #include <map>
 #include <iostream>
 
-#include "headers/global.hpp"
-#include "headers/utils.hpp"
-#include "headers/map-collision.hpp"
-#include "headers/orange-ghost.hpp"
+#include "global.hpp"
+#include "utils.hpp"
+#include "map-collision.hpp"
+#include "blue-ghost.hpp"
+#include "red-ghost.hpp"
+#include "asset-path.hpp"
 
-OrangeGhost::OrangeGhost():use_door{1},direction{2},frightened_move_lag{GHOST_FRIGHTENED_MOVE_LAG} {}
+BlueGhost::BlueGhost():use_door{1},direction{1},frightened_move_lag{GHOST_FRIGHTENED_MOVE_LAG} {}
 
-void OrangeGhost::draw(sf::RenderWindow &i_window,sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
+void BlueGhost::draw(sf::RenderWindow &i_window,sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
 {
     sf::Texture texture;
-    texture.loadFromFile("./assets/sprite_sheets/orange_ghost.png");
+    texture.loadFromFile(asset_path("./assets/sprite_sheets/blue_ghost.png"));
     if(cur_movement_mode == MovementMode::Frightened_mode)  current_sprite_frame_edge = GHOST_FRIGHTENED_FRAME_END ;
 
     sf::IntRect rectSourceSprite(current_sprite_frame_edge,0,24,24);  // width = 24 , height = 24  
@@ -39,27 +41,27 @@ void OrangeGhost::draw(sf::RenderWindow &i_window,sf::Clock &animation_clock, co
     i_window.draw(sprite);
 }
 
-void OrangeGhost::set_position(short i_x,short i_y)
+void BlueGhost::set_position(short i_x,short i_y)
 {
     position = {i_x,i_y};
 }
 
-void OrangeGhost::set_target(short i_x,short i_y)
+void BlueGhost::set_target(short i_x,short i_y)
 {
     target = {i_x,i_y};
 }
 
-void OrangeGhost::set_home_exit(short i_x,short i_y)
+void BlueGhost::set_home_exit(short i_x,short i_y)
 {
     home_exit = {i_x,i_y};
 }
 
-void OrangeGhost::set_home(short i_x,short i_y)
+void BlueGhost::set_home(short i_x ,short i_y)
 {
     home = {i_x,i_y};
 }
 
-void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman, MovementMode &cur_movement_mode)
+void BlueGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map,Pacman& i_pacman,Position i_red_ghost_position, MovementMode &cur_movement_mode)
 {
     // Check for collision with pacman
     if(sprite_collision(ghost_sprite,i_pacman.get_pacman_sprite()))
@@ -92,31 +94,60 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
     }
     else if(!use_door)
     {
-        if(cur_movement_mode == MovementMode::Scatter_mode)
+          if(cur_movement_mode == MovementMode::Scatter_mode)
         {
-            target = ORANGE_GHOST_SCATTER_TARGET;
+            target = BLUE_GHOST_SCATTER_TARGET;
         }
         else if(cur_movement_mode == MovementMode::Chase_mode)
         {
-            short distance_to_target = get_manhattan_distance(position,i_pacman.getPosition());
-            //The orange ghost will chase Pacman until it gets near pacman by 8 cells. Then it'll switch to the scatter mode.
-            if (distance_to_target > CELL_SIZE * 8)
+        // 1) First the Blue ghost targets 2 tiles ahead of pacman
+        Position new_target {i_pacman.getPosition().x, i_pacman.getPosition().y};
+        
+        switch (i_pacman.getDirection())
+        {
+            case Direction::Right: 
             {
-                target = i_pacman.getPosition();
+                new_target.x += CELL_SIZE * 2;
+                break;
             }
-            else
+            case Direction::Up: 
             {
-                target = ORANGE_GHOST_SCATTER_TARGET;
+                new_target.y += CELL_SIZE * 2;
+                break;
+            }
+            case Direction::Left:  
+            {
+                new_target.x -= CELL_SIZE * 2;
+                break;
+            }
+            case Direction::Down: 
+            {
+                new_target.y -= CELL_SIZE * 2;
+                break;
             }
         }
-    }
 
+        Position two_tiles_ahead_pacman = new_target;
+
+        // 2) Create a vector to this new_target from the red_ghost and double it
+        short doubleDistanceApart = get_euclidean_distance(two_tiles_ahead_pacman,AvailablePositions {i_red_ghost_position.x,i_red_ghost_position.y}) * 2;
+
+        // 3) Retrieve coordinate of where it lands which will be the new target 
+               // i) Get angle between vector and perpendicular height
+               double angle = get_angle_between_perpendicular_height_and_vector(i_red_ghost_position,two_tiles_ahead_pacman);
+
+               // ii) Using this angle we can use SOH CAH TOA to get location of endpoint of vector
+               target = get_unknown_coordinate(i_red_ghost_position, doubleDistanceApart, angle);
+               set_target(target.x,target.y);
+               
+            //    std::cout<< "Target for Blue 🔵🔵  x :"<<target.x<<", y : "<<target.y<<std::endl;
+        }
+    }
     // Setting direction based on current movement mode
     if(cur_movement_mode == MovementMode::Frightened_mode)
     {
         // Allows ghost to get out of home if was sent back by pacman
-        Position pink_home = {static_cast<short>(home.x - CELL_SIZE), home.y};
-        if(position == home || position == pink_home)
+        if(position == home)
         {
             set_optimal_direction(walls, direction, GHOST_SPEED,position ,home_exit);
         }
@@ -150,7 +181,6 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
     {
         switch (direction)
         {
-            // case 0:
             case Direction::Right:
             {
                 current_sprite_frame_edge = GHOST_RIGHT_FRAME_END;
@@ -158,7 +188,6 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
                 
                 break;
             }
-            // case 1:
             case Direction::Up:
             {
                 current_sprite_frame_edge = GHOST_UP_FRAME_END;
@@ -166,7 +195,6 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
 
                 break;
             }
-            // case 2:
             case Direction::Left:
             {
                 current_sprite_frame_edge = GHOST_LEFT_FRAME_END;
@@ -174,7 +202,6 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
 
                 break;
             }
-            // case 3:
             case Direction::Down:
             {
                 current_sprite_frame_edge = GHOST_DOWN_FRAME_END;
@@ -194,10 +221,10 @@ void OrangeGhost::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_
 	}
 }
 
-void OrangeGhost::reset()
+void BlueGhost::reset()
 {
     use_door = 1;
-    direction = 2;
+    direction = 1;
     position = home;
     target = home_exit;
 }

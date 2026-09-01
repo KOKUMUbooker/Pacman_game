@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <iostream>
-#include "headers/draw-map.hpp"
+#include "draw-map.hpp"
 
 void draw_map(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, sf::RenderWindow &i_window)
 {   
