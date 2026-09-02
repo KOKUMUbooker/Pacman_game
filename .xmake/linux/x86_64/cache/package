@@ -1,0 +1,47 @@
+{
+    sfml = {
+        __enabled = true,
+        sysincludedirs = "/usr/include/X11/dri",
+        envs = {
+            LD_LIBRARY_PATH = {
+                "/home/booker/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
+                "/home/booker/.xmake/packages/l/libxdmcp/1.1.5/fac034d258af4aada2c864884ac5f660/lib",
+                "/home/booker/.xmake/packages/l/libxcb/1.17.0/37052fd83b89473abd67102965ff1e6c/lib",
+                "/home/booker/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib"
+            },
+            PATH = {
+                "/home/booker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
+                "/home/booker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin",
+                "/home/booker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
+                "/home/booker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
+                "/home/booker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
+                "/home/booker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
+                "/home/booker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/Scripts",
+                "/home/booker/.xmake/packages/m/m4/1.4.19/8b7c7260096844c1a8b1c8d773e64b3d/bin",
+                "/home/booker/.xmake/packages/a/autoconf/2.72/acf1540df7454fb895001231995955f2/bin",
+                "/home/booker/.xmake/packages/a/automake/1.17/023583104f8e4bd8aa209b66cbeb4bee/bin",
+                "/home/booker/.xmake/packages/l/libtool/2.6.0/e0bdba70c39545bb9c3dcc8050ee49d5/bin",
+                "/home/booker/.xmake/packages/a/autotools/latest/725e51fe81b74141ade9efbd3ccaf900/bin",
+                "/home/booker/.xmake/packages/g/gperf/3.2.1/efebb5f5e634400e95353d8b19c09308/bin"
+            },
+            PYTHONPATH = {
+                "/home/booker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages"
+            }
+        },
+        version = "2.6.2",
+        links = {
+            "sfml-audio",
+            "sfml-graphics",
+            "sfml-network",
+            "sfml-window",
+            "sfml-system",
+            "X11",
+            "xcb",
+            "Xau",
+            "Xdmcp",
+            "GL",
+            "GLX"
+        },
+        __requirestr = "sfml"
+    }
+}

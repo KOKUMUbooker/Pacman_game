@@ -2,15 +2,16 @@
 #include <array>
 #include <iostream>
 
-#include "headers/global.hpp"
-#include "headers/convert-sketch.hpp"
-#include "headers/draw-map.hpp"
-#include "headers/pacman.hpp"
-#include "headers/red-ghost.hpp"
-#include "headers/pink-ghost.hpp"
-#include "headers/blue-ghost.hpp"
-#include "headers/orange-ghost.hpp"
-#include "headers/utils.hpp"
+#include "global.hpp"
+#include "convert-sketch.hpp"
+#include "draw-map.hpp"
+#include "pacman.hpp"
+#include "red-ghost.hpp"
+#include "pink-ghost.hpp"
+#include "blue-ghost.hpp"
+#include "orange-ghost.hpp"
+#include "utils.hpp"
+#include "asset-path.hpp"
 
 int main(){
     Pacman pacman;
@@ -168,7 +169,7 @@ int main(){
 				window.draw(text2);
 
 				sf::Texture texture;
-    			texture.loadFromFile("./assets/heart.png");
+    			texture.loadFromFile(asset_path("./assets/heart.png"));
 				float initial_x_position = 54.0f; 
 				for (short i = 1; i <= pacman.get_lives() ; i ++)
 				{
@@ -210,7 +211,7 @@ int main(){
 		{
 			// std::cout << "GAME LOST 😵😵😵😵😵😵😵"<<std::endl;
 			sf::Texture texture;
-    		texture.loadFromFile("./assets/game-over.png");
+    		texture.loadFromFile(asset_path("./assets/game-over.png"));
 			sf::Sprite sprite(texture);
 			sprite.setPosition(40.0f,(CELL_SIZE * MAP_HEIGHT) / 5); 
 			window.draw(sprite);

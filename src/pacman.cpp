@@ -1,16 +1,17 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include "headers/global.hpp"
-#include "headers/pacman.hpp"
-#include "headers/map-collision.hpp"
+#include "global.hpp"
+#include "pacman.hpp"
+#include "map-collision.hpp"
+#include "asset-path.hpp"
 
 Pacman::Pacman():dead{0},current_sprite_frame_edge_x_axis{0},current_sprite_frame_top_distance{0},energized_duration{0},lives{3}{}
 
 void Pacman::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
 {
     sf::Texture texture;
-    texture.loadFromFile("./assets/sprite_sheets/pacman.png");
+    texture.loadFromFile(asset_path("./assets/sprite_sheets/pacman.png"));
 
     sf::IntRect rectSourceSprite(current_sprite_frame_edge_x_axis,current_sprite_frame_top_distance,16,16);  // width = 24 , height = 24  
     sf::Sprite sprite(texture,rectSourceSprite);
