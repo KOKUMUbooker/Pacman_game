@@ -110,14 +110,15 @@ bool sprite_collision(sf::Sprite sprite1, sf::Sprite sprite2)
 
 	// 2) Calculate the dy and dx based on positions of the 2 sprites
 		// Get the center positions of either x and y axes for the sprites then difference of those centers are the dy and dx values 
-	float dx = (sprite1.getPosition().x + sprite1_shape.width) - (sprite2.getPosition().x + sprite2_shape.width);
-	float dy = (sprite1.getPosition().y + sprite1_shape.height) - (sprite2.getPosition().y + sprite2_shape.height);
+	// sf::Sprite has no getPosition(); `position` is a public field.
+	float dx = (sprite1.position.x + sprite1_shape.size.x) - (sprite2.position.x + sprite2_shape.size.x);
+	float dy = (sprite1.position.y + sprite1_shape.size.y) - (sprite2.position.y + sprite2_shape.size.y);
 
 	// 3) Get distance between the 2 sprite centers using pythagorean theorem
 	float distance = std::sqrt(std::pow(dx,2) + std::pow(dy,2));
 
 	// 4) If distance between the 2 sprites is less than the sum of their radii, collision has occurred
-	if(distance < (sprite1_shape.width/2 + sprite2_shape.width/2))
+	if(distance < (sprite1_shape.size.x/2 + sprite2_shape.size.x/2))
 	{
 		is_colliding = 1;
 	}

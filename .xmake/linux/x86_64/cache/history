@@ -7,6 +7,25 @@
         "xmake build",
         "xmake run",
         "xmake build",
-        "xmake run"
+        "xmake run",
+        "xmake f -c -p wasm -m release",
+        "xmake build",
+        "xmake lua /home/booker/.local/share/xmake/modules/private/utils/statistics.lua",
+        "xmake lua /home/booker/.local/share/xmake/actions/build/cleaner.lua",
+        "xmake f -c -p wasm -m release",
+        "xmake build",
+        "xmake f -c -p linux -m release",
+        "xmake build",
+        "xmake build",
+        "xmake f -c -p wasm -m release",
+        "xmake build",
+        "xmake f -c -p linux -m release",
+        "xmake build",
+        "xmake f -c -p linux -m release",
+        "xmake build",
+        "xmake f -c -p linux -m release",
+        "xmake build",
+        "xmake f -c -p linux -m release",
+        "xmake build"
     }
 }

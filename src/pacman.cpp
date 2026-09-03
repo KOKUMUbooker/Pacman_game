@@ -6,36 +6,41 @@
 #include "map-collision.hpp"
 #include "asset-path.hpp"
 
-Pacman::Pacman():dead{0},current_sprite_frame_edge_x_axis{0},current_sprite_frame_top_distance{0},energized_duration{0},lives{3}{}
+Pacman::Pacman():
+    dead{0},
+    current_sprite_frame_edge_x_axis{0},
+    current_sprite_frame_top_distance{0},
+    pacman_texture(sf::Texture::loadFromFile(asset_path("./assets/sprite_sheets/pacman.png")).value()),
+    energized_duration{0},
+    lives{3}
+{}
 
 void Pacman::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
 {
-    sf::Texture texture;
-    texture.loadFromFile(asset_path("./assets/sprite_sheets/pacman.png"));
-
-    sf::IntRect rectSourceSprite(current_sprite_frame_edge_x_axis,current_sprite_frame_top_distance,16,16);  // width = 24 , height = 24  
-    sf::Sprite sprite(texture,rectSourceSprite);
-    sprite.setPosition(position.x,position.y);
-    pacman_sprite = sprite;
+    // sf::Sprite::textureRect is a float Rect2f now, not an IntRect.
+    sf::FloatRect rectSourceSprite({static_cast<float>(current_sprite_frame_edge_x_axis), static_cast<float>(current_sprite_frame_top_distance)}, {16.f, 16.f});  // width = 24 , height = 24  
+    pacman_sprite.textureRect = rectSourceSprite;
+    pacman_sprite.position = {static_cast<float>(position.x), static_cast<float>(position.y)};
 
     // After a specified duration we change the sprite section currently in view
     if(animation_clock.getElapsedTime().asSeconds() > 0.1f)
     {
-        if(rectSourceSprite.left == 48)
+        if(rectSourceSprite.position.x == 48.f)
         {
-            rectSourceSprite.left = 0 ;
+            rectSourceSprite.position.x = 0.f ;
             current_sprite_frame_edge_x_axis = 0;
         }
         else{
-            rectSourceSprite.left += PACMAN_SPRITE_GAME_CHARACTER_WIDTH ;
+            rectSourceSprite.position.x += PACMAN_SPRITE_GAME_CHARACTER_WIDTH ;
             current_sprite_frame_edge_x_axis += PACMAN_SPRITE_GAME_CHARACTER_WIDTH ;
         }
 
-        sprite.setTextureRect(rectSourceSprite);
+        pacman_sprite.textureRect = rectSourceSprite;
         animation_clock.restart();
     }
 
-    i_window.draw(sprite);
+    // Texture is supplied at draw time, not stored on the sprite.
+    i_window.draw(pacman_sprite, {.texture = &pacman_texture});
 }
 
 void Pacman::set_position(short i_x,short i_y)
@@ -83,28 +88,28 @@ void Pacman::update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, 
 	walls[2] = map_collision(0, 0, position.x - PACMAN_SPEED, position.y, i_map);
 	walls[3] = map_collision(0, 0, position.x, PACMAN_SPEED + position.y, i_map);
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
     {   
         if(!walls[3])
         {
             direction = 3;
         }
     }
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         if(!walls[2])
         {
             direction = 2;
         }
     }
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
         if(!walls[0])
         {
             direction = 0;
         }
     }
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
         if(!walls[1])
         {

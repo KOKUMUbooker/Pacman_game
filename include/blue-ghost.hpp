@@ -11,7 +11,8 @@ class BlueGhost
     Position target;
 	Position home_exit;
     Position home;
-    sf::Sprite ghost_sprite;
+    sf::Texture ghost_texture;
+    sf::Sprite ghost_sprite{};
     short current_sprite_frame_edge = 0;
     unsigned short frightened_move_lag;
     bool move;

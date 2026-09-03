@@ -11,7 +11,8 @@ class PinkGhost
     Position target;
 	Position home_exit;
     Position home;
-    sf::Sprite ghost_sprite;
+    sf::Texture ghost_texture; // Loaded once; Sprite no longer stores a texture itself.
+    sf::Sprite ghost_sprite{}; // Pure aggregate (position/scale/textureRect/color) — default-initialized with {}.
     short current_sprite_frame_edge = 0;
     unsigned short frightened_move_lag;
     bool move;

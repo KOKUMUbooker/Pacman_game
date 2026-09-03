@@ -18,7 +18,7 @@ void draw_map(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, 
                 {
                     // Rectangular shape of 16 * 16
                     sf::RectangleShape cell_shape(sf::Vector2f(CELL_SIZE,CELL_SIZE));       
-                    cell_shape.setPosition(CELL_SIZE * a, CELL_SIZE * b);
+                    cell_shape.setPosition({CELL_SIZE * a, CELL_SIZE * b});
                     cell_shape.setFillColor(sf::Color(36, 36, 255));
                     
                     i_window.draw(cell_shape);
@@ -28,7 +28,7 @@ void draw_map(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, 
                 case Cell::Door:
                 {
                     sf::RectangleShape cell_door(sf::Vector2f(CELL_SIZE,CELL_SIZE / 1.5 ));
-                    cell_door.setPosition(CELL_SIZE * a, CELL_SIZE * b );
+                    cell_door.setPosition({CELL_SIZE * a, CELL_SIZE * b});
                     cell_door.setFillColor(sf::Color(138, 136, 137));
                     i_window.draw(cell_door);
 
@@ -38,7 +38,7 @@ void draw_map(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, 
                 case Cell::Pellet:
                 {
                     sf::CircleShape circle_shape(CELL_SIZE / 8);
-                    circle_shape.setPosition(CELL_SIZE * a + (CELL_SIZE / 2 - circle_shape.getRadius()), CELL_SIZE * b+ (CELL_SIZE / 2 - circle_shape.getRadius()));
+                    circle_shape.setPosition({CELL_SIZE * a + (CELL_SIZE / 2 - circle_shape.getRadius()), CELL_SIZE * b+ (CELL_SIZE / 2 - circle_shape.getRadius())});
 
                     i_window.draw(circle_shape);
                     break;
@@ -46,7 +46,7 @@ void draw_map(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, 
                 case Cell::Energizer:
                 {
                     sf::CircleShape circle_shape(CELL_SIZE / 4);
-                    circle_shape.setPosition(CELL_SIZE * a + (CELL_SIZE / 2 - circle_shape.getRadius()), CELL_SIZE * b+ (CELL_SIZE / 2 - circle_shape.getRadius()));
+                    circle_shape.setPosition({CELL_SIZE * a + (CELL_SIZE / 2 - circle_shape.getRadius()), CELL_SIZE * b+ (CELL_SIZE / 2 - circle_shape.getRadius())});
 
                     i_window.draw(circle_shape);
                     break;

@@ -11,7 +11,8 @@ class RedGhost
     unsigned char direction; // 0 = Right, 1 = Up, 2 = left, 3 = Down
     bool use_door;
     short current_sprite_frame_edge;
-    sf::Sprite ghost_sprite;
+    sf::Texture ghost_texture;
+    sf::Sprite ghost_sprite{};
     unsigned short frightened_move_lag;
     bool move;
 

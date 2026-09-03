@@ -1,10 +1,11 @@
 {
-    options = {
-        mode = "release",
-        plat = "linux"
-    },
     recheck = false,
     mtimes = {
-        ["xmake.lua"] = 1788289489
+        ["xmake.lua"] = 1788458725
+    },
+    options = {
+        clean = true,
+        mode = "release",
+        plat = "linux"
     }
 }

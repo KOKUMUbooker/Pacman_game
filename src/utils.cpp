@@ -2,7 +2,6 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-#include <SFML/Graphics.hpp>
 
 #include "global.hpp"
 #include "utils.hpp"
