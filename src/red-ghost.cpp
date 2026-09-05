@@ -17,11 +17,11 @@ RedGhost::RedGhost():
     frightened_move_lag{GHOST_FRIGHTENED_MOVE_LAG}
 {}
 
-void RedGhost::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
+void RedGhost::draw(sf::RenderTarget &i_window, sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
 {
     if(cur_movement_mode == MovementMode::Frightened_mode)  current_sprite_frame_edge = GHOST_FRIGHTENED_FRAME_END ;
 
-    sf::FloatRect rectSourceSprite({static_cast<float>(current_sprite_frame_edge), 0.f}, {24.f, 24.f});  // width = 24 , height = 24  
+    sf::Rect2f rectSourceSprite({static_cast<float>(current_sprite_frame_edge), 0.f}, {24.f, 24.f});  // width = 24 , height = 24  // width = 24 , height = 24  
     ghost_sprite.textureRect = rectSourceSprite;
     ghost_sprite.scale = {0.65f, 0.65f};
     ghost_sprite.position = {static_cast<float>(position.x), static_cast<float>(position.y)};

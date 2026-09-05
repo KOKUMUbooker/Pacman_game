@@ -15,10 +15,10 @@ Pacman::Pacman():
     lives{3}
 {}
 
-void Pacman::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock)
+void Pacman::draw(sf::RenderTarget &i_window, sf::Clock &animation_clock)
 {
     // sf::Sprite::textureRect is a float Rect2f now, not an IntRect.
-    sf::FloatRect rectSourceSprite({static_cast<float>(current_sprite_frame_edge_x_axis), static_cast<float>(current_sprite_frame_top_distance)}, {16.f, 16.f});  // width = 24 , height = 24  
+    sf::Rect2f rectSourceSprite({static_cast<float>(current_sprite_frame_edge_x_axis), static_cast<float>(current_sprite_frame_top_distance)}, {16.f, 16.f});  // width = 24 , height = 24  
     pacman_sprite.textureRect = rectSourceSprite;
     pacman_sprite.position = {static_cast<float>(position.x), static_cast<float>(position.y)};
 

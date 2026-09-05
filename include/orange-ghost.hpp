@@ -19,7 +19,7 @@ class OrangeGhost
 
     public:
         OrangeGhost();
-        void draw(sf::RenderWindow &i_window,sf::Clock &animation_clock, const MovementMode &cur_movement_mode);
+        void draw(sf::RenderTarget &i_window,sf::Clock &animation_clock, const MovementMode &cur_movement_mode);
         void set_position(short i_x ,short i_y);
         void set_target(short i_x ,short i_y);
         void reset();

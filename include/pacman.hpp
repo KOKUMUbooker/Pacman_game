@@ -17,7 +17,7 @@ class Pacman
 
     public:
         Pacman();
-        void draw(sf::RenderWindow &i_window, sf::Clock &animation_clock);
+        void draw(sf::RenderTarget &i_window, sf::Clock &animation_clock);
         void set_position(short i_x ,short i_y);
         void reset();
         void update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, MovementMode &cur_movement_mode);

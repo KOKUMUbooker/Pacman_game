@@ -99,14 +99,13 @@ bool map_collision(bool i_collect_pellets, bool i_use_door, short i_x, short i_y
 // 	return is_colliding;
 // }
 
-// Utilizes circle box collision detection
 bool sprite_collision(sf::Sprite sprite1, sf::Sprite sprite2)
 {
 	bool is_colliding = 0;
 
 	// 1) Create the smallest rectangles that can hold the sprites - a way of getting radius
-	sf::FloatRect sprite1_shape = sprite1.getGlobalBounds();
-	sf::FloatRect sprite2_shape = sprite2.getGlobalBounds();
+	sf::Rect2f sprite1_shape = sprite1.getGlobalBounds();
+	sf::Rect2f sprite2_shape = sprite2.getGlobalBounds();
 
 	// 2) Calculate the dy and dx based on positions of the 2 sprites
 		// Get the center positions of either x and y axes for the sprites then difference of those centers are the dy and dx values 
