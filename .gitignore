@@ -2,3 +2,9 @@ game
 pacman
 .vscode/
 build/
+build/
+build-native/
+build-wasm/
+third_party/vrsfml/build/
+third_party/vrsfml/build-native/
+third_party/vrsfml/build-wasm/
