@@ -2,16 +2,24 @@
 
 ## Compilation Instructions
 
-To compile the project, you need to have [xmake](https://xmake.io/guide/quick-start.html) installed.
+The project uses CMake and builds [VRSFML](https://github.com/vittorioromeo/VRSFML) (a fork of SFML) from source as a subdirectory dependency, so no separate SFML installation is required — just a C++20-capable compiler and CMake 3.22+.
 
 ```bash
-rm -rf build
-xmake f -p linux -m release   # or whatever your native plat is
-xmake build
-xmake run
+mkdir -p build && cd build
+cmake ..
+cmake --build .
+./pacman
 ```
 
-By following these steps, you can compile and run the project on multiple platforms.
+To build for the web (WebAssembly), configure with an Emscripten toolchain file instead:
+
+```bash
+mkdir -p build-wasm && cd build-wasm
+emcmake cmake ..
+cmake --build .
+```
+
+This produces a `pacman.html` bundle alongside the compiled output.
 
 ## Demo Samples
 
@@ -34,17 +42,17 @@ Each of the ghosts has 3 modes:
 
 ### i) Scatter Mode
 
-• Default starting mode for all ghosts whereby they target their respective corners within the game map.
+- Default starting mode for all ghosts whereby they target their respective corners within the game map.
 
-• The target corners are inaccessible and the ghosts cannot stop moving or reverse direction.
+- The target corners are inaccessible and the ghosts cannot stop moving or reverse direction.
 
-• They are forced to continue past the target but will turn back towards it as soon as possible.
+- They are forced to continue past the target but will turn back towards it as soon as possible.
 
-• This results in each ghost's path eventually becoming a fixed loop in their corner.
+- This results in each ghost's path eventually becoming a fixed loop in their corner.
 
-• If left in Scatter mode, each ghost would remain in its loop indefinitely.
+- If left in Scatter mode, each ghost would remain in its loop indefinitely.
 
-• However, the game's configuration limits the mode to the first 7 seconds of the game which later on switches to chase mode unless interrupted by Pac-Man eating an energizer causing a switch to frightened mode.
+- However, the game's configuration limits the mode to the first 7 seconds of the game which later on switches to chase mode unless interrupted by Pac-Man eating an energizer causing a switch to frightened mode.
 
 ![Ghosts Scatter Mode](./readme_assets/ghosts-scatter-mode.png)
 
@@ -52,57 +60,57 @@ _Each ghost's target tile and eventual looping path, color-coded to match their 
 
 ### ii) Frightened Mode
 
-• Occurs when Pac-Man consumes an energizer resulting in slow movement of the ghosts as well as switching color to dark blue.
+- Occurs when Pac-Man consumes an energizer resulting in slow movement of the ghosts as well as switching color to dark blue.
 
-• During this mode, Pac-Man can openly attack any of the ghosts without losing a life.
+- During this mode, Pac-Man can openly attack any of the ghosts without losing a life.
 
 ### iii) Chase Mode
 
-• Occurs automatically after the 7 seconds of the scatter mode have elapsed.
+- Occurs automatically after the 7 seconds of the scatter mode have elapsed.
 
-• This causes the ghosts to target Pac-Man each in their unique way.
+- This causes the ghosts to target Pac-Man each in their unique way.
 
-• During this mode, Pac-Man is vulnerable to the ghosts and contact between Pac-Man and any of the ghosts will cost the player a life.
+- During this mode, Pac-Man is vulnerable to the ghosts and contact between Pac-Man and any of the ghosts will cost the player a life.
 
 ## Game Entities
 
 ### 1. Pac-Man
 
-• Is the controllable yellow character that is under the control of the player.
+- Is the controllable yellow character that is under the control of the player.
 
-• Control is automatic such that provided there is no wall Pac-Man will progressively move in that current direction until he encounters an obstacle.
+- Control is automatic such that provided there is no wall Pac-Man will progressively move in that current direction until he encounters an obstacle.
 
-• Upon arriving at a junction (map regions with more than 1 pathway), the player can switch Pac-Man's current direction by hitting a different arrow key.
+- Upon arriving at a junction (map regions with more than 1 pathway), the player can switch Pac-Man's current direction by hitting a different arrow key.
 
 Pac-Man's control scheme is as follows:
 
-• Up arrow key: move up
+- Up arrow key: move up
 
-• Down arrow key: move downwards
+- Down arrow key: move downwards
 
-• Right arrow key: move to the right
+- Right arrow key: move to the right
 
-• Left arrow key: move to the left
+- Left arrow key: move to the left
 
 ### 2. Ghosts House
 
-• Only one ghost (the red ghost) begins in the actual maze, while the others are inside a small area in the middle of the maze, often referred to as the "ghost house".
+- Only one ghost (the red ghost) begins in the actual maze, while the others are inside a small area in the middle of the maze, often referred to as the "ghost house".
 
-• The pink, blue, and orange ghosts will only return to this area if they are eaten by an energized Pac-Man (when mode = Frightened mode), or as a result of their positions being reset when Pac-Man dies.
+- The pink, blue, and orange ghosts will only return to this area if they are eaten by an energized Pac-Man (when mode = Frightened mode), or as a result of their positions being reset when Pac-Man dies.
 
-• The ghost house is otherwise inaccessible, and is not a valid area for Pac-Man or the ghosts to move into once they get out.
+- The ghost house is otherwise inaccessible, and is not a valid area for Pac-Man or the ghosts to move into once they get out.
 
 ### 3. Target Tiles
 
-• Much of Pac-Man's design and mechanics revolve around the idea of the board being split into tiles.
+- Much of Pac-Man's design and mechanics revolve around the idea of the board being split into tiles.
 
-• As an example of the impact of tiles, a ghost is considered to have caught Pac-Man when it occupies the same tile as him.
+- As an example of the impact of tiles, a ghost is considered to have caught Pac-Man when it occupies the same tile as him.
 
-• The large majority of the time, each ghost has a specific tile that it is trying to reach, and its behavior revolves around trying to get to that tile from its current one.
+- The large majority of the time, each ghost has a specific tile that it is trying to reach, and its behavior revolves around trying to get to that tile from its current one.
 
 ### 4. Ghosts
 
-• These are the game enemies: four little ghost-shaped monsters, each of them a different color - blue, yellow, pink, and red.
+- These are the game enemies: four little ghost-shaped monsters, each of them a different color - blue, yellow, pink, and red.
 
 #### Individual Ghost Personalities
 
@@ -204,9 +212,11 @@ _Character and nicknames of the ghosts in English and Japanese._
 
 ## Technologies Used
 
-• C++
+- C++20
 
-• SFML
+- [VRSFML](https://github.com/vittorioromeo/VRSFML) (a WebAssembly-friendly fork of SFML)
+
+- CMake
 
 ## Content Reference
 
