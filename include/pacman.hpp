@@ -1,5 +1,13 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <SFML/System/Rect2.hpp>
+#include <SFML/System/Path.hpp>
+#include <SFML/System/Time.hpp>
+#include <array>
 #include "global.hpp"
 
 class Pacman

@@ -1,5 +1,15 @@
-#include "SFML/Graphics.hpp"
-#include "SFML/Graphics/GraphicsContext.hpp"
+#include <SFML/Graphics/GraphicsContext.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/System/Path.hpp>
+#include <SFML/System/Time.hpp>
 #include <array>
 #include <iostream>
 
@@ -17,14 +27,18 @@
 int main(){
     // VRSFML requires a graphics context to exist before any window,
     // texture, or font is created.
-    auto graphicsContext = sf::GraphicsContext::create().value();
+   	auto graphicsContextOpt = sf::GraphicsContext::create();
+    if (!graphicsContextOpt.hasValue()) { std::cout << "FAILED: GraphicsContext::create" << std::endl; return 1; }
+    auto graphicsContext = std::move(graphicsContextOpt).value();
 
     Pacman pacman;
 	
 	//Initial ghost positions.
 	std::array<Position, 4> ghost_positions;
 
-	const auto font = sf::Font::openFromFile("./assets/fonts/Pixel NES.otf").value();
+	auto fontOpt = sf::Font::openFromFile(asset_path("./assets/fonts/Pixel NES.otf"));
+    if (!fontOpt.hasValue()) { std::cout << "FAILED: Font::openFromFile" << std::endl; return 1; }
+	const auto font = std::move(fontOpt).value();
 
 	// Ghosts
 	RedGhost red_ghost;
@@ -78,22 +92,26 @@ int main(){
 	orange_ghost.set_home_exit(house_exit.x, house_exit.y);
    
 	// The window itself is created at the *scaled* size (what the player actually sees)...
-	auto window = sf::RenderWindow::create(
+	auto windowOpt = sf::RenderWindow::create(
 		{
 			.size  = {static_cast<unsigned int>(CELL_SIZE * MAP_WIDTH * SCREEN_RESIZE),
 			          static_cast<unsigned int>((FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT) * SCREEN_RESIZE)},
 			.title = "Pac-Man Game",
-		}).value();
+		});
+    if (!windowOpt.hasValue()) { std::cout << "FAILED: RenderWindow::create" << std::endl; return 1; }
+	auto window = std::move(windowOpt).value();
 
 	// ...while all game content is drawn into this offscreen texture at the
 	// original *unscaled* resolution, exactly as it always has been. This
 	// replaces the old setView(...) call: instead of remapping coordinates
 	// via a view, we render at native scale into rtGame and then blit that
 	// (scaled up) onto the window at the very end of each frame.
-	auto rtGame = sf::RenderTexture::create(
+	auto rtGameOpt = sf::RenderTexture::create(
 		{static_cast<unsigned int>(CELL_SIZE * MAP_WIDTH),
 		 static_cast<unsigned int>(FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT)}
-	).value();
+	);
+    if (!rtGameOpt.hasValue()) { std::cout << "FAILED: RenderTexture::create" << std::endl; return 1; }
+	auto rtGame = std::move(rtGameOpt).value();
 
 	window.setFramerateLimit(60); // limit frame rate to 60fps
 
