@@ -30,6 +30,10 @@ set(SFML_BUILD_AUDIO FALSE CACHE BOOL "" FORCE)
 set(SFML_BUILD_NETWORK FALSE CACHE BOOL "" FORCE)
 set(SFML_BUILD_EXAMPLES FALSE CACHE BOOL "" FORCE)
 
+if(EMSCRIPTEN)
+    add_compile_definitions(SFML_SYSTEM_EMSCRIPTEN)
+endif()
+
 # Incorporate the local library repository
 add_subdirectory(third_party/vrsfml)
 
@@ -54,6 +58,9 @@ if(EMSCRIPTEN)
         "--preload-file" "${CMAKE_CURRENT_SOURCE_DIR}/assets@/assets"
         "-sALLOW_MEMORY_GROWTH=1"
         "-sUSE_WEBGL2=1"
+        "-sGL_EXPLICIT_UNIFORM_LOCATION=1"
+        "-sEXPORTED_RUNTIME_METHODS=[HEAPU8,HEAPU16,HEAPU32,HEAP32,HEAPF32]"
+        "-sASYNCIFY=1"
     )
 else()
     message(STATUS "Configuring Desktop-specific asset handling rules...")
