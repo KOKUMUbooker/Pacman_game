@@ -1,5 +1,6 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/System/Rect2.hpp>
 
 #include <array>
 #include "global.hpp"
