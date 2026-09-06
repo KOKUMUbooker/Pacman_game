@@ -21,6 +21,13 @@ cmake --build .
 
 This produces a `pacman.html` bundle alongside the compiled output.
 
+To run serve wasm files :
+
+```
+cd build-wasm
+python3 -m http.server 8000
+```
+
 ## Demo Samples
 
 1. Sample game play
