@@ -10,13 +10,14 @@ class Pacman
     unsigned char direction; // 0 = Right, 1 = Up, 2 = left, 3 = Down
     short current_sprite_frame_top_distance = 0;
     short current_sprite_frame_edge_x_axis = 0;
-    sf::Sprite pacman_sprite;
+    sf::Texture pacman_texture; // Loaded once; Sprite no longer stores a texture itself.
+    sf::Sprite pacman_sprite{}; // Pure aggregate (position/scale/textureRect/color) — must be default-initialized with {}.
     unsigned short energized_duration;
     unsigned short lives;
 
     public:
         Pacman();
-        void draw(sf::RenderWindow &i_window, sf::Clock &animation_clock);
+        void draw(sf::RenderTarget &i_window, sf::Clock &animation_clock);
         void set_position(short i_x ,short i_y);
         void reset();
         void update(std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, MovementMode &cur_movement_mode);

@@ -58,7 +58,7 @@ struct Position
 	short y;
 
 	// Overload the == operator to allow for equality comparison.
-	bool operator==(const Position& i_position)
+	bool operator==(const Position& i_position) const
 	{
 		return this->x == i_position.x && this->y == i_position.y;
 	}

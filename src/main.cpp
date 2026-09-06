@@ -1,4 +1,5 @@
-#include <SFML/Graphics.hpp>
+#include "SFML/Graphics.hpp"
+#include "SFML/Graphics/GraphicsContext.hpp"
 #include <array>
 #include <iostream>
 
@@ -14,13 +15,16 @@
 #include "asset-path.hpp"
 
 int main(){
+    // VRSFML requires a graphics context to exist before any window,
+    // texture, or font is created.
+    auto graphicsContext = sf::GraphicsContext::create().value();
+
     Pacman pacman;
 	
 	//Initial ghost positions.
 	std::array<Position, 4> ghost_positions;
 
-	sf::Font font;
-	font.loadFromFile("./assets/fonts/Pixel NES.otf");
+	const auto font = sf::Font::openFromFile("./assets/fonts/Pixel NES.otf").value();
 
 	// Ghosts
 	RedGhost red_ghost;
@@ -73,14 +77,26 @@ int main(){
 	blue_ghost.set_home_exit(house_exit.x, house_exit.y);
 	orange_ghost.set_home_exit(house_exit.x, house_exit.y);
    
-	// (16 * 21 * 2 = 672) Width , (16 * 16 * 21 = 5376) Height for sf::VideoMode
-	sf::RenderWindow window(sf::VideoMode(CELL_SIZE * MAP_WIDTH * SCREEN_RESIZE, (FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT) * SCREEN_RESIZE), "Pac-Man Game", sf::Style::Close);
+	// The window itself is created at the *scaled* size (what the player actually sees)...
+	auto window = sf::RenderWindow::create(
+		{
+			.size  = {static_cast<unsigned int>(CELL_SIZE * MAP_WIDTH * SCREEN_RESIZE),
+			          static_cast<unsigned int>((FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT) * SCREEN_RESIZE)},
+			.title = "Pac-Man Game",
+		}).value();
 
-	// Sets the visible area of the window to the specified rectangle 
-	window.setView(sf::View(sf::FloatRect(0, 0, CELL_SIZE * MAP_WIDTH, FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT)));
+	// ...while all game content is drawn into this offscreen texture at the
+	// original *unscaled* resolution, exactly as it always has been. This
+	// replaces the old setView(...) call: instead of remapping coordinates
+	// via a view, we render at native scale into rtGame and then blit that
+	// (scaled up) onto the window at the very end of each frame.
+	auto rtGame = sf::RenderTexture::create(
+		{static_cast<unsigned int>(CELL_SIZE * MAP_WIDTH),
+		 static_cast<unsigned int>(FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT)}
+	).value();
+
 	window.setFramerateLimit(60); // limit frame rate to 60fps
 
-    sf::Event event; // Keeps track of events occurring within the window
 	MovementMode movement_mode {MovementMode::Scatter_mode};
 
 	// Game timers
@@ -91,43 +107,48 @@ int main(){
 	sf::Clock orange_animation_clock;
 	sf::Clock game_play_time;
 
+	// There's no window.isOpen()/close() in VRSFML; the loop runs until we
+	// see a Closed event, at which point we flip this flag and exit.
+	bool running = true;
+
     // Game loop
-    while (window.isOpen())
+    while (running)
     {
-		window.clear();
+		rtGame.clear();
 
         // Handle events
-        while (window.pollEvent(event))
+        while (const sf::base::Optional event = window.pollEvent())
 		{
-			switch (event.type)
+			if (event->is<sf::Event::Closed>())
 			{
-				case sf::Event::Closed:
+				//Making sure the player can close the window.
+				running = false;
+			}
+			else if (const auto* key_pressed = event->getIf<sf::Event::KeyPressed>())
+			{
+				if(key_pressed->code == sf::Keyboard::Key::Enter && (game_won || pacman.get_dead()))
 				{
-					//Making sure the player can close the window.
-					window.close();
-				}
-				case sf::Event::KeyPressed:
-				{
-					if(event.key.code == sf::Keyboard::Enter && (game_won || pacman.get_dead()))
-					{
-						std::cout << "Resetting the game 🔁🔁🔁🔁🔁🔁🔁🔁"<<std::endl;
-						// Reset the game
-						movement_mode = MovementMode::Scatter_mode;
-						game_won = 0;
-						pacman.reset();
-						red_ghost.reset();
-						pink_ghost.reset();
-						blue_ghost.reset();
-						orange_ghost.reset();
-						game_play_time.restart();
-						map = convert_sketch(map_sketch, ghost_positions, pacman);
-						draw_map(map,window);
-						continue;
-					}
+					std::cout << "Resetting the game 🔁🔁🔁🔁🔁🔁🔁🔁"<<std::endl;
+					// Reset the game
+					movement_mode = MovementMode::Scatter_mode;
+					game_won = 0;
+					pacman.reset();
+					red_ghost.reset();
+					pink_ghost.reset();
+					blue_ghost.reset();
+					orange_ghost.reset();
+					game_play_time.restart();
+					map = convert_sketch(map_sketch, ghost_positions, pacman);
+					draw_map(map,rtGame);
+					continue;
 				}
 			}
 		}
 
+		if (!running)
+		{
+			break;
+		}
 
 		if(!game_won && pacman.get_dead() == 0)
 		{
@@ -158,33 +179,31 @@ int main(){
 
 			if(!game_won)
 			{
-				sf::Text text("LIVES ",font,10);
-				text.move(CELL_SIZE,BOTTOM_SCREEN_Y_AXIS + 2.0f);
+				sf::Text text(font, {.string = "LIVES ", .characterSize = 10});
+				text.position = {CELL_SIZE, BOTTOM_SCREEN_Y_AXIS + 2.0f};
 				text.setFillColor(sf::Color::Red);
-				window.draw(text);
+				rtGame.draw(text);
 
-				sf::Text text2("GHOST MODE : " + get_ghost_mode(movement_mode) ,font,10);
-				text2.move( CELL_SIZE * 10 ,BOTTOM_SCREEN_Y_AXIS + 2.0f);
+				sf::Text text2(font, {.string = sf::Utf8String("GHOST MODE : " + get_ghost_mode(movement_mode)), .characterSize = 10});
+				text2.position = {CELL_SIZE * 10, BOTTOM_SCREEN_Y_AXIS + 2.0f};
 				text2.setFillColor(sf::Color::Yellow);
-				window.draw(text2);
+				rtGame.draw(text2);
 
-				sf::Texture texture;
-    			texture.loadFromFile(asset_path("./assets/heart.png"));
+				const auto texture = sf::Texture::loadFromFile(asset_path("./assets/heart.png")).value();
 				float initial_x_position = 54.0f; 
 				for (short i = 1; i <= pacman.get_lives() ; i ++)
 				{
-					sf::Sprite sprite(texture);
-					sprite.setScale(0.025f,0.025f);
+					sf::Sprite sprite{.scale = {0.025f, 0.025f}};
 					if(i > 1) initial_x_position = initial_x_position + CELL_SIZE;
-					sprite.setPosition(initial_x_position,BOTTOM_SCREEN_Y_AXIS + 2.0f); 
-					window.draw(sprite);
+					sprite.position = {initial_x_position, BOTTOM_SCREEN_Y_AXIS + 2.0f}; 
+					rtGame.draw(sprite, {.texture = &texture});
 				}
 
-				pacman.draw(window,pacman_animation_clock);
-				red_ghost.draw(window,red_animation_clock,movement_mode);
-				pink_ghost.draw(window,pink_animation_clock,movement_mode);
-				blue_ghost.draw(window,blue_animation_clock,movement_mode);
-				orange_ghost.draw(window,orange_animation_clock,movement_mode);
+				pacman.draw(rtGame,pacman_animation_clock);
+				red_ghost.draw(rtGame,red_animation_clock,movement_mode);
+				pink_ghost.draw(rtGame,pink_animation_clock,movement_mode);
+				blue_ghost.draw(rtGame,blue_animation_clock,movement_mode);
+				orange_ghost.draw(rtGame,orange_animation_clock,movement_mode);
 
 				pacman.update(map,movement_mode);
 				red_ghost.update(map,pacman,movement_mode);
@@ -192,36 +211,41 @@ int main(){
 				blue_ghost.update(map,pacman,red_ghost.getPosition(),movement_mode);
 				orange_ghost.update(map,pacman,movement_mode);
 
-       		 	draw_map(map,window);
+       		 	draw_map(map,rtGame);
 			}
 		}
 		else if (game_won)
 		{
 			// std::cout << "GAME WON 🎉🎉🎉🎉🎉🎉🎉"<<std::endl;
-			sf::Text text("GAME WON",font,32);
-			sf::Text text2("Hit Enter to play again",font,16);
-			text.move(55.0f,168.0f);
-			text2.move(25.0f,200.0f);
+			sf::Text text(font, {.string = "GAME WON", .characterSize = 32});
+			sf::Text text2(font, {.string = "Hit Enter to play again", .characterSize = 16});
+			text.position = {55.0f, 168.0f};
+			text2.position = {25.0f, 200.0f};
 			text.setFillColor(sf::Color::Yellow);
 			text2.setFillColor(sf::Color::Yellow);
-			window.draw(text);
-			window.draw(text2);
+			rtGame.draw(text);
+			rtGame.draw(text2);
 		}
 		else if (pacman.get_dead())
 		{
 			// std::cout << "GAME LOST 😵😵😵😵😵😵😵"<<std::endl;
-			sf::Texture texture;
-    		texture.loadFromFile(asset_path("./assets/game-over.png"));
-			sf::Sprite sprite(texture);
-			sprite.setPosition(40.0f,(CELL_SIZE * MAP_HEIGHT) / 5); 
-			window.draw(sprite);
+			const auto texture = sf::Texture::loadFromFile(asset_path("./assets/game-over.png")).value();
+			sf::Sprite sprite{.position = {40.0f, (CELL_SIZE * MAP_HEIGHT) / 5.0f}};
+			rtGame.draw(sprite, {.texture = &texture});
 			
-			sf::Text text("Hit Enter to play again",font,12);
+			sf::Text text(font, {.string = "Hit Enter to play again", .characterSize = 12});
 			text.setFillColor(sf::Color::Red);
-			text.move(CELL_SIZE * 4,(CELL_SIZE * MAP_HEIGHT) / 1.35);
-			window.draw(text);
+			text.position = {CELL_SIZE * 4, (CELL_SIZE * MAP_HEIGHT) / 1.35f};
+			rtGame.draw(text);
 		}
     
+        rtGame.display();
+
+        // Blit the unscaled game content onto the window, scaled up by SCREEN_RESIZE.
+        // DrawTextureSettings' default textureRect{} means "the full texture"
+        // (unlike sf::Sprite, where an empty textureRect means zero-size/nothing).
+        window.clear();
+        window.draw(rtGame.getTexture(), {.scale = {static_cast<float>(SCREEN_RESIZE), static_cast<float>(SCREEN_RESIZE)}});
         window.display();
     }
     

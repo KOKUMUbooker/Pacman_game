@@ -9,36 +9,39 @@
 #include "map-collision.hpp"
 #include "asset-path.hpp"
 
-RedGhost::RedGhost():direction{0},use_door{0},current_sprite_frame_edge{0},frightened_move_lag{GHOST_FRIGHTENED_MOVE_LAG}{}
+RedGhost::RedGhost():
+    direction{0},
+    use_door{0},
+    current_sprite_frame_edge{0},
+    ghost_texture(sf::Texture::loadFromFile(asset_path("./assets/sprite_sheets/red_ghost.png")).value()),
+    frightened_move_lag{GHOST_FRIGHTENED_MOVE_LAG}
+{}
 
-void RedGhost::draw(sf::RenderWindow &i_window, sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
+void RedGhost::draw(sf::RenderTarget &i_window, sf::Clock &animation_clock, const MovementMode &cur_movement_mode)
 {
-    sf::Texture texture;
-    texture.loadFromFile(asset_path("./assets/sprite_sheets/red_ghost.png")); 
     if(cur_movement_mode == MovementMode::Frightened_mode)  current_sprite_frame_edge = GHOST_FRIGHTENED_FRAME_END ;
 
-    sf::IntRect rectSourceSprite(current_sprite_frame_edge,0,24,24);  // width = 24 , height = 24  
-    sf::Sprite sprite(texture,rectSourceSprite);
-    sprite.setScale(0.65f,0.65f);
-    sprite.setPosition(position.x,position.y);
-    ghost_sprite = sprite;
+    sf::Rect2f rectSourceSprite({static_cast<float>(current_sprite_frame_edge), 0.f}, {24.f, 24.f});  // width = 24 , height = 24  // width = 24 , height = 24  
+    ghost_sprite.textureRect = rectSourceSprite;
+    ghost_sprite.scale = {0.65f, 0.65f};
+    ghost_sprite.position = {static_cast<float>(position.x), static_cast<float>(position.y)};
 
     // After a specified duration we change the sprite section currently in view
  if (animation_clock.getElapsedTime().asSeconds() > GHOST_FRAME_SWITCH_DURATION && cur_movement_mode != MovementMode::Frightened_mode)
     {
-        if(rectSourceSprite.left == current_sprite_frame_edge)
+        if(rectSourceSprite.position.x == current_sprite_frame_edge)
         {
-            rectSourceSprite.left =  current_sprite_frame_edge - SPRITE_GAME_CHARACTER_WIDTH;
+            rectSourceSprite.position.x =  current_sprite_frame_edge - SPRITE_GAME_CHARACTER_WIDTH;
         }
         else{
-            rectSourceSprite.left = current_sprite_frame_edge;
+            rectSourceSprite.position.x = current_sprite_frame_edge;
         }
 
-        sprite.setTextureRect(rectSourceSprite);
+        ghost_sprite.textureRect = rectSourceSprite;
         animation_clock.restart();
     }
 
-    i_window.draw(sprite);
+    i_window.draw(ghost_sprite, {.texture = &ghost_texture});
 }
 
 void RedGhost::set_position(short i_x,short i_y)

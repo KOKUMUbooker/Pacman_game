@@ -11,14 +11,15 @@ class BlueGhost
     Position target;
 	Position home_exit;
     Position home;
-    sf::Sprite ghost_sprite;
+    sf::Texture ghost_texture;
+    sf::Sprite ghost_sprite{};
     short current_sprite_frame_edge = 0;
     unsigned short frightened_move_lag;
     bool move;
 
     public:
         BlueGhost();
-        void draw(sf::RenderWindow &i_window,sf::Clock &animation_clock, const MovementMode &cur_movement_mode);
+        void draw(sf::RenderTarget &i_window,sf::Clock &animation_clock, const MovementMode &cur_movement_mode);
         void set_position(short i_x ,short i_y);
         void set_target(short i_x ,short i_y);
         void set_home_exit(short i_x ,short i_y);
