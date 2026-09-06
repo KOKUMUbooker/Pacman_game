@@ -1,8 +1,31 @@
 # Pac-man
 
+## Getting Started
+
+### Prerequisites
+
+- A C++20-capable compiler (GCC 13+ or Clang 16+ recommended)
+- [CMake](https://cmake.org/) 3.22 or newer
+- [Git](https://git-scm.com/) (for cloning, including submodules)
+- To build for the web: the [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html), activated in your shell (`source ./emsdk_env.sh` or equivalent)
+
+### Cloning the repository
+
+This project uses [VRSFML](https://github.com/vittorioromeo/VRSFML) as a git submodule under `third_party/vrsfml`, rather than committing a vendored copy directly. Clone with submodules included:
+
+```bash
+git clone --recurse-submodules <this-repo-url>
+```
+
+If you already cloned without that flag, initialize the submodule afterward:
+
+```bash
+git submodule update --init --recursive
+```
+
 ## Compilation Instructions
 
-The project uses CMake and builds [VRSFML](https://github.com/vittorioromeo/VRSFML) (a fork of SFML) from source as a subdirectory dependency, so no separate SFML installation is required — just a C++20-capable compiler and CMake 3.22+.
+The project uses CMake and builds VRSFML from source as a subdirectory dependency, so no separate SFML installation is required — just a C++20-capable compiler and CMake 3.22+.
 
 ```bash
 mkdir -p build && cd build
@@ -21,12 +44,16 @@ cmake --build .
 
 This produces a `pacman.html` bundle alongside the compiled output.
 
-To run serve wasm files :
+> **Note:** the wasm build currently relies on Emscripten's Asyncify (`-sASYNCIFY=1`) to keep the game's native-style blocking main loop working inside a browser. This noticeably increases binary size and can affect performance compared to a "native" Emscripten port. See the comments in `CMakeLists.txt` for details, and consider restructuring the main loop around `emscripten_set_main_loop` if this becomes a problem.
 
-```
+To run serve wasm files:
+
+```bash
 cd build-wasm
 python3 -m http.server 8000
 ```
+
+Then open `http://localhost:8000/pacman.html` in a browser.
 
 ## Demo Samples
 
