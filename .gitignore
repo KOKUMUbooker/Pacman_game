@@ -1,6 +1,7 @@
 game
 pacman
 .vscode/
+compile_commands.json
 build/
 build/
 build-native/
