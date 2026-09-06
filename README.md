@@ -23,6 +23,22 @@ If you already cloned without that flag, initialize the submodule afterward:
 git submodule update --init --recursive
 ```
 
+### Editor setup (VS Code / clangd)
+
+`CMakeLists.txt` has `CMAKE_EXPORT_COMPILE_COMMANDS` enabled, so every `cmake ..` configure step generates a `compile_commands.json` inside the build directory — this tells editor tooling the exact include paths and defines used for each file, so it can resolve `#include <SFML/...>` correctly instead of guessing (and showing false-positive red squiggles even though the actual build succeeds).
+
+1. Install the [clangd extension](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd) for VS Code (recommended over Microsoft's built-in C/C++ IntelliSense for CMake projects like this one — disable/uninstall that extension if you have it, since the two can conflict).
+2. Run at least one `cmake ..` configure (see below) so `build/compile_commands.json` exists.
+3. Symlink it to the project root, where clangd looks by default:
+
+```bash
+   ln -s build/compile_commands.json compile_commands.json
+```
+
+(alternatively, set `"clangd.arguments": ["--compile-commands-dir=build"]` in your VS Code settings instead of symlinking) 4. Reload the window if clangd was already running. Red underlines from missing/incorrect includes should clear up.
+
+If you build for wasm as well, `build-wasm/compile_commands.json` uses Emscripten-specific flags and defines (some of which differ from the native build, as covered in `CMakeLists.txt`'s comments) — clangd can only point at one `compile_commands.json` at a time, so pick whichever target you're actively working on.
+
 ## Compilation Instructions
 
 The project uses CMake and builds VRSFML from source as a subdirectory dependency, so no separate SFML installation is required — just a C++20-capable compiler and CMake 3.22+.
