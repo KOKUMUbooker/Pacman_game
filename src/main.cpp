@@ -227,9 +227,9 @@ int main(){
 
 					const auto texture = sf::Texture::loadFromFile(asset_path("./assets/heart.png")).value();
 					float initial_x_position = 54.0f; 
-					for (short i = 1; i <= pacman.get_lives() ; i ++)
+					for (short i = 1; i <= pacman.get_lives(); i++)
 					{
-						sf::Sprite sprite{.scale = {0.025f, 0.025f}};
+						sf::Sprite sprite{.scale = {0.025f, 0.025f}, .textureRect = texture.getRect()};
 						if(i > 1) initial_x_position = initial_x_position + CELL_SIZE;
 						sprite.position = {initial_x_position, BOTTOM_SCREEN_Y_AXIS + 2.0f}; 
 						rtGame.draw(sprite, {.texture = &texture});
