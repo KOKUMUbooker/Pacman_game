@@ -14,7 +14,7 @@
 This project uses [VRSFML](https://github.com/vittorioromeo/VRSFML) as a git submodule under `third_party/vrsfml`, rather than committing a vendored copy directly. Clone with submodules included:
 
 ```bash
-git clone --recurse-submodules <this-repo-url>
+git clone --recurse-submodules https://github.com/KOKUMUbooker/Pacman_game.git
 ```
 
 If you already cloned without that flag, initialize the submodule afterward:
