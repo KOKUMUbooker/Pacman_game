@@ -62,7 +62,14 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     SFML::Graphics 
     SFML::Window 
     SFML::System
+    SFML::ImGui
 )
+
+# CPM fetches imgui into the build tree rather than third_party/, and
+# sfml-imgui doesn't re-export its include dir, so pull it directly
+# from the imgui target VRSFML's CPM invocation created.
+get_target_property(IMGUI_INCLUDE_DIRS imgui INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(${PROJECT_NAME} PRIVATE ${IMGUI_INCLUDE_DIRS})
 
 # ==============================================================================
 # Platform-Specific Adjustments (Web vs Desktop)
