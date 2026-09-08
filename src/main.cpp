@@ -209,9 +209,9 @@ int main(){
 
 				const auto texture = sf::Texture::loadFromFile(asset_path("./assets/heart.png")).value();
 				float initial_x_position = 54.0f; 
-				for (short i = 1; i <= pacman.get_lives() ; i ++)
+				for (short i = 1; i <= pacman.get_lives(); i++)
 				{
-					sf::Sprite sprite{.scale = {0.025f, 0.025f}};
+					sf::Sprite sprite{.scale = {0.025f, 0.025f}, .textureRect = texture.getRect()};
 					if(i > 1) initial_x_position = initial_x_position + CELL_SIZE;
 					sprite.position = {initial_x_position, BOTTOM_SCREEN_Y_AXIS + 2.0f}; 
 					rtGame.draw(sprite, {.texture = &texture});
@@ -251,10 +251,14 @@ int main(){
 			sf::Sprite sprite{.position = {40.0f, (CELL_SIZE * MAP_HEIGHT) / 5.0f}};
 			rtGame.draw(sprite, {.texture = &texture});
 			
-			sf::Text text(font, {.string = "Hit Enter to play again", .characterSize = 12});
+			sf::Text text(font, {.string = "GAME LOST", .characterSize = 32});
+			sf::Text text2(font, {.string = "Hit Enter to play again", .characterSize = 12});
 			text.setFillColor(sf::Color::Red);
-			text.position = {CELL_SIZE * 4, (CELL_SIZE * MAP_HEIGHT) / 1.35f};
+			text2.setFillColor(sf::Color::Red);
+			text.position = {55.0f, 168.0f};
+			text2.position = {55.0f, 200.0f};
 			rtGame.draw(text);
+			rtGame.draw(text2);
 		}
     
         rtGame.display();
