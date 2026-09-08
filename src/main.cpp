@@ -146,7 +146,7 @@ int main(){
 			{
 				if(key_pressed->code == sf::Keyboard::Key::Enter && (game_won || pacman.get_dead()))
 				{
-					std::cout << "Resetting the game 🔁🔁🔁🔁🔁🔁🔁🔁"<<std::endl;
+					//std::cout << "Resetting the game 🔁🔁🔁🔁🔁🔁🔁🔁"<<std::endl;
 					// Reset the game
 					movement_mode = MovementMode::Scatter_mode;
 					game_won = 0;
@@ -173,7 +173,7 @@ int main(){
 			// Timer to determine when to switch movement mode
 			if(game_play_time.getElapsedTime().asSeconds() > 7.0f && movement_mode != MovementMode::Chase_mode && movement_mode != MovementMode::Frightened_mode){
 				movement_mode = MovementMode::Chase_mode;
-				std::cout<<"Switching to chase Mode"<< std::endl;
+				//std::cout<<"Switching to chase Mode"<< std::endl;
 			}
 
 			game_won = 1;
