@@ -75,6 +75,15 @@ if(EMSCRIPTEN)
     set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
 
     target_link_options(${PROJECT_NAME} PRIVATE 
+        # Custom HTML page/theme for the wasm build. Also required to work
+        # around a VRSFML CMake quirk: its own `--shell-file` default path
+        # (in cmake/Config.cmake) resolves relative to CMAKE_SOURCE_DIR,
+        # which points at *our* project root when VRSFML is added via
+        # add_subdirectory -- not VRSFML's own directory -- so without this,
+        # linking fails looking for a nonexistent Pacman_game/emscripten/shell.html
+        # (see README/commit history for the original fix).
+        "--shell-file=${CMAKE_CURRENT_SOURCE_DIR}/emscripten/shell.html"
+
         # Bundles the assets/ directory into the wasm build's virtual
         # filesystem at /assets, matching the relative paths our own code
         # already uses (e.g. "./assets/fonts/...").
@@ -99,9 +108,11 @@ if(EMSCRIPTEN)
         "-sGL_EXPLICIT_UNIFORM_LOCATION=1"
 
         # VRSFML's Emscripten-side glue code accesses these typed-array heap
-        # views directly; they aren't exported by default and the app aborts
-        # at runtime ("'HEAPU32' was not exported...") without this.
-        "-sEXPORTED_RUNTIME_METHODS=[HEAPU8,HEAPU16,HEAPU32,HEAP32,HEAPF32]"
+        # views directly, and the shell's own Fullscreen button calls
+        # Module.requestFullscreen(); none of these are exported by default
+        # and calling them aborts at runtime ("'X' was not exported...")
+        # without this.
+        "-sEXPORTED_RUNTIME_METHODS=[HEAPU8,HEAPU16,HEAPU32,HEAP32,HEAPF32,requestFullscreen]"
 
         # Our main loop is a blocking `while (running) { ... }`, which is
         # the normal pattern for a native game but is incompatible with a
