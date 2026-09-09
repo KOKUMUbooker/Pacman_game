@@ -20,6 +20,7 @@ add_executable(${PROJECT_NAME})
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})
 
+
 # Explicitly point at VRSFML's own include directory rather than relying
 # solely on its exported CMake targets to propagate it. This guards against
 # accidentally picking up an unrelated SFML installation elsewhere on the
@@ -40,6 +41,16 @@ message(STATUS "Configuring project to build VRSFML from source...")
 set(SFML_BUILD_AUDIO FALSE CACHE BOOL "" FORCE)
 set(SFML_BUILD_NETWORK FALSE CACHE BOOL "" FORCE)
 set(SFML_BUILD_EXAMPLES FALSE CACHE BOOL "" FORCE)
+
+# VRSFML's own default for this option is the *literal, unevaluated* string
+# "$<CONFIG:Debug>" (a generator expression) when nothing overrides it. Since
+# CMake's if() cannot evaluate generator expressions, that string is always
+# treated as truthy regardless of build type -- meaning stack traces (and
+# the POSIX-only libbacktrace dependency they pull in) are effectively always
+# enabled on multi-config generators like Visual Studio unless explicitly
+# forced off here. libbacktrace's sources (unistd.h, unwind.h) don't exist
+# on Windows/MSVC, so this must stay FALSE for a Windows build to succeed.
+set(SFML_ENABLE_STACK_TRACES FALSE CACHE BOOL "" FORCE)
 
 # VRSFML's shader preamble logic (getShaderPreamble() in Shader.cpp) picks
 # the correct GLSL version string based on this define. Without it, builds
