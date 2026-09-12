@@ -318,6 +318,15 @@
         display: block;
       }
 
+      .controls-hint {
+        text-align: center;
+        font-family: var(--code-font);
+        font-size: 0.7rem;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+        margin: 0.75rem 0 0;
+      }
+
       /* Center the canvas and preserve aspect ratio (letterbox/pillarbox)
          when the browser's native Fullscreen API takes it fullscreen.
          Without this, the canvas keeps its original pixel size and sits
@@ -519,6 +528,7 @@
         ></canvas>
       </div>
 
+      <p class="controls-hint">Use arrow keys to move</p>
       <!-- <div class="canvas-actions">
         <button class="btn" onclick="Module.requestFullscreen(false, false)">
           Fullscreen
