@@ -100,11 +100,14 @@ Studio Installer under the "Desktop development with C++" workload.)
    <!-- ![Sample game play](./readme_assets/game_demo.gif) -->
    <img src="./readme_assets/game_demo.gif" alt="drawing" width="50%" height="50%"/>
 
-2. Game won screen
+2. Wasm demo 
+https://github.com/user-attachments/assets/18313201-af2b-4b83-8f80-3ad0724ecedc
+
+3. Game won screen
    <!-- ![Game won screen](./readme_assets/game_won_screen.png) -->
    <img src="./readme_assets/game_won_screen.png" alt="drawing" width="50%" height="50%"/>
 
-3. Game lost screen
+4. Game lost screen
    <!-- ![Game lost screen](./readme_assets/game_over_screen.png) -->
    <img src="./readme_assets/game_over_screen.png" alt="drawing" width="50%" height="50%"/>
 
