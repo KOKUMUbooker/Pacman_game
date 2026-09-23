@@ -85,6 +85,19 @@ if(EMSCRIPTEN)
     # instead of a bare native-looking executable.
     set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
 
+    # Copies SEO files (robots.txt, sitemap.xml) alongside the built
+    # pacman.html/js/wasm/data, so they're deployed together as one unit
+    # from build-wasm/ rather than needing a separate manual copy step.
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/emscripten/robots.txt"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/robots.txt"
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/emscripten/sitemap.xml"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/sitemap.xml"
+        COMMENT "Copying robots.txt and sitemap.xml to build-wasm output..."
+    )
+
     target_link_options(${PROJECT_NAME} PRIVATE 
         # Custom HTML page/theme for the wasm build. Also required to work
         # around a VRSFML CMake quirk: its own `--shell-file` default path
