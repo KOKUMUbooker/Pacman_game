@@ -73,43 +73,6 @@ Then open `http://localhost:8000/pacman.html` in a browser.
 
 ## Known Issues
 
-### Windows / MSVC build failure in VRSFML (`file_clock::to_sys`)
-
-Building natively on Windows (with real `cl.exe` **or** `clang-cl`) currently fails
-while compiling `sfml-system`, with an error along the lines of:
-`error : no member named 'to_sys' in 'std::filesystem::_File_time_clock'; did you
-mean 'std::chrono::time_zone::to_sys'?`
-
-This is a genuine portability bug in VRSFML's own code, not something specific to
-this project. `Path::getLastWriteTimeSecondsSinceEpoch()` (in
-`src/SFML/System/Unity/Path.cpp`) calls `std::chrono::file_clock::to_sys(ftime)`.
-The C++20 standard allows each standard library vendor to implement `file_clock`
-with **either** `to_sys()`/`from_sys()` **or** `to_utc()`/`from_utc()`, but not
-necessarily both — libstdc++/libc++ (GCC/Clang) chose the `to_sys` pair; MSVC's
-STL chose the `to_utc` pair instead. So the existing code compiles fine on
-Linux/macOS but not on Windows.
-
-This has been reported upstream ([vittorioromeo/VRSFML#22](https://github.com/vittorioromeo/VRSFML/issues/22)),
-along with a pull request fixing it by switching to the portable
-`std::chrono::clock_cast` API instead.
-
-**Until that fix is merged upstream**, if you're building natively on Windows,
-you'll need to apply the same one-line patch to your local submodule copy:
-
-```cpp
-// In third_party/vrsfml/src/SFML/System/Unity/Path.cpp,
-// inside Path::getLastWriteTimeSecondsSinceEpoch():
-
-// Before
-const auto sysTime = std::chrono::file_clock::to_sys(ftime);
-
-// After
-const auto sysTime = std::chrono::clock_cast<std::chrono::system_clock>(ftime);
-```
-
-Once the upstream PR is merged and you update the `third_party/vrsfml` submodule
-to a commit that includes it, this patch (and this section) can be removed.
-
 ### Windows / MSVC `consteval` compile errors (`FmtString`, error C7595)
 
 Building with real MSVC (`cl.exe`) also currently fails elsewhere with errors like:
