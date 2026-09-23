@@ -101,6 +101,7 @@ Studio Installer under the "Desktop development with C++" workload.)
    <img src="./readme_assets/game_demo.gif" alt="drawing" width="50%" height="50%"/>
 
 2. Wasm demo 
+
 https://github.com/user-attachments/assets/18313201-af2b-4b83-8f80-3ad0724ecedc
 
 3. Game won screen
